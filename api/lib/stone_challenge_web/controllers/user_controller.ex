@@ -22,13 +22,8 @@ defmodule StoneChallengeWeb.UserController do
   def create(conn, params) do
     case Accounts.register_user_and_account(params) do
       {:ok, user} ->
-        Logger.info("Deleting user from the system: #{inspect(user)}")
-
-        json(conn, %{id: "messenger"})
-
-      # conn
-      # |> StoneChallengeWeb.Auth.login(user)
-      # |> render(StoneChallengeWeb.UserView, "create.json", user: user)
+        conn
+        |> render(StoneChallengeWeb.UserView, "create.json", user: user)
 
       {:error, _} ->
         conn

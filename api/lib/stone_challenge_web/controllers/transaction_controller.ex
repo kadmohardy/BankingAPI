@@ -31,6 +31,14 @@ defmodule StoneChallengeWeb.TransactionController do
         conn
         |> render(StoneChallengeWeb.TransactionView, "create.json", transaction: transaction)
 
+      {:error, :user_not_registered} ->
+        conn
+        |> render(StoneChallengeWeb.ErrorView, "401.json", message: "Usuário não cadastrado")
+
+      {:error, :not_have_money} ->
+        conn
+        |> render(StoneChallengeWeb.ErrorView, "401.json", message: "Saldo indisponível")
+
       {:error, %Ecto.Changeset{} = changeset} ->
         conn
         |> render(StoneChallengeWeb.ErrorView, "401.json", message: changeset)

@@ -54,8 +54,11 @@ defmodule StoneChallenge.Accounts do
         end
 
       case Banking.register_account(user) do
-        {:ok, _account} -> {:ok, user}
-        {:error, changeset} -> Repo.rollback({:account, changeset})
+        {:ok, _account} ->
+          get_user_account(user.id)
+
+        {:error, changeset} ->
+          Repo.rollback({:account, changeset})
       end
     end)
   end

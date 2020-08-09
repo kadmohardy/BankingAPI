@@ -53,33 +53,41 @@ defmodule StoneChallenge.Banking do
     Repo.all(Transaction)
   end
 
+  def realize do
+    Repo.all(Transaction)
+  end
+
   def register_transaction(
         %{
           "user_id" => user_id,
           "amount" => amount,
-          "transaction_type_id" => transaction_type_id,
+          "type" => type,
           "target_account_number" => target_account_number
         } = params
       ) do
     user = Accounts.get_user_account(user_id)
 
-    target_account = get_account_by(account_number: target_account_number)
-
-    Logger.info("USUARIO TEM SALDO  ==============: #{inspect(target_account)}")
-
     if user != nil do
       cond do
-        target_account == nil ->
-          {:error, :target_account_not_found}
+        # Verify if user has money
+        user.account.balance < amount ->
+          {:error, :not_have_money}
 
-        user.account.balance > amount ->
-          case update_user_accounts(user.account, target_account, amount) do
+        # Do bank draft
+        type == 1 ->
+          case bank_draft(user.account, amount) do
             {:ok, _} ->
               create_transaction(params)
           end
 
-        true ->
-          {:error, :not_have_money}
+        # Do bank transfer
+        type == 2 ->
+          target_account = get_account_by(account_number: target_account_number)
+
+          case bank_transfer(user.account, target_account, amount) do
+            {:ok, _} ->
+              create_transaction(params)
+          end
       end
     else
       {:error, :user_not_registered}
@@ -92,7 +100,7 @@ defmodule StoneChallenge.Banking do
     |> Repo.update!()
   end
 
-  defp update_user_accounts(%Account{} = user_account, %Account{} = target_account, amount) do
+  defp bank_transfer(%Account{} = user_account, %Account{} = target_account, amount) do
     Repo.transaction(fn ->
       user_account
       |> Account.update_changeset(%{balance: user_account.balance - amount})
@@ -100,6 +108,14 @@ defmodule StoneChallenge.Banking do
 
       target_account
       |> Account.update_changeset(%{balance: target_account.balance + amount})
+      |> Repo.update!()
+    end)
+  end
+
+  defp bank_draft(%Account{} = user_account, amount) do
+    Repo.transaction(fn ->
+      user_account
+      |> Account.update_changeset(%{balance: user_account.balance - amount})
       |> Repo.update!()
     end)
   end

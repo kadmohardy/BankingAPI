@@ -20,13 +20,19 @@ defmodule StoneChallengeWeb.UserView do
     user_json(user)
   end
 
+  def user_account_json(account) do
+    %{
+      account_number: account.account_number,
+      name: account.balance
+    }
+  end
+
   def user_json(user) do
     %{
       id: user.id,
       name: user.name,
-      email: user.email
-      # inserted_at: user.inserted_at,
-      # updated_at: user.updated_at
+      email: user.email,
+      account: user_account_json(user.account)
     }
   end
 end

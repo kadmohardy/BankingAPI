@@ -1,5 +1,6 @@
 defmodule StoneChallengeWeb.TransactionView do
   use StoneChallengeWeb, :view
+  alias StoneChallenge.Helper.BankingHelper
 
   def render("show.json", %{transaction: transaction}) do
     transaction_json(transaction)
@@ -17,7 +18,8 @@ defmodule StoneChallengeWeb.TransactionView do
     %{
       id: transaction.id,
       amount: transaction.amount,
-      type: transaction.type,
+      target_account_number: transaction.target_account_number,
+      type: BankingHelper.get_operation_str(transaction.type),
       inserted_at: transaction.inserted_at,
       updated_at: transaction.updated_at
     }

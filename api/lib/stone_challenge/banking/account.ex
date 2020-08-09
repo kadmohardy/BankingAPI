@@ -6,14 +6,13 @@ defmodule StoneChallenge.Banking.Account do
     field :account_number, :string
     field :balance, :integer
     field :user_id, :id
-    # belongs_to :user, StoneChallenge.Accounts.User
 
     timestamps()
   end
 
   def changeset(account, params \\ %{}) do
     account
-    |> cast(params, [:account_number])
+    |> cast(params, [:account_number, :user_id])
     |> validate_required([:account_number])
     |> unique_constraint([:account_number])
   end
