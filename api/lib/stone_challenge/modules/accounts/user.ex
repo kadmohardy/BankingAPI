@@ -9,6 +9,7 @@ defmodule StoneChallenge.Accounts.User do
     field :password_hash, :string
 
     has_one :account, StoneChallenge.Banking.Account
+    has_many :auth_tokens, StoneChallenge.AuthToken
     timestamps()
   end
 

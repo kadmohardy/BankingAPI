@@ -1,14 +1,16 @@
 defmodule StoneChallengeWeb.SessionController do
   use StoneChallengeWeb, :controller
+  require Logger
 
   def create(conn, %{"account_number" => account_number, "password" => password}) do
-    case StoneChallenge.Accounts.authenticate_by_account_number_and_password(
+    case StoneChallenge.Accounts.sign_in(
            account_number,
            password
          ) do
-      {:ok, user} ->
+      {:ok, auth_token} ->
         conn
-        |> StoneChallengeWeb.Auth.login(user)
+        |> put_status(:ok)
+        |> render(StoneChallengeWeb.SessionView, "show.json", auth_token: auth_token)
 
       {:error, :not_found} ->
         conn
@@ -18,7 +20,9 @@ defmodule StoneChallengeWeb.SessionController do
   end
 
   def delete(conn, _) do
-    conn
-    |> StoneChallengeWeb.Auth.logout()
+    case StoneChallenge.Accounts.sign_out(conn) do
+      {:error, reason} -> conn |> send_resp(400, reason)
+      {:ok, _} -> conn |> send_resp(204, "")
+    end
   end
 end

@@ -37,8 +37,6 @@ defmodule StoneChallengeWeb.UserController do
     if conn.assigns.curret_user do
       conn
     else
-      IO.puts("Testando")
-
       conn
       |> halt()
     end

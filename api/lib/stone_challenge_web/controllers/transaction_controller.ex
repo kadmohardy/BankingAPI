@@ -2,16 +2,9 @@ defmodule StoneChallengeWeb.TransactionController do
   use StoneChallengeWeb, :controller
 
   alias StoneChallenge.Banking
-  alias StoneChallenge.Banking.Transaction
+
   require Logger
   # plug(:authenticate when action in [:index, :show])
-
-  def show(conn, _params) do
-    transaction = Banking.get_transaction("1")
-
-    conn
-    |> render(StoneChallengeWeb.TransactionView, "show.json", transaction: transaction)
-  end
 
   def index(conn, _params) do
     transactions = Banking.list_transactions()

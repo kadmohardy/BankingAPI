@@ -1,14 +1,15 @@
 defmodule StoneChallenge.Banking do
   @moduledoc """
-  This module handle Accounts context
+  This module handle Accounts context. Here, we have the functions that realize
+  bank transfer and bank draft
   """
+
   import Ecto.Query, warn: false
   require Logger
 
   alias StoneChallenge.Repo
   alias StoneChallenge.Banking.Account
   alias StoneChallenge.Banking.Transaction
-  alias StoneChallenge.Banking.TransactionType
   alias StoneChallenge.Accounts
   alias StoneChallenge.Helper.BankingHelper
 

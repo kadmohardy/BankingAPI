@@ -6,6 +6,7 @@ defmodule StoneChallenge.Accounts do
   alias StoneChallenge.Repo
   alias StoneChallenge.Accounts.User
   alias StoneChallenge.Banking
+  alias StoneChallenge.Services.Authenticator
 
   require Logger
 
@@ -72,23 +73,44 @@ defmodule StoneChallenge.Accounts do
     Repo.one(query)
   end
 
-  def authenticate_by_account_number_and_password(account_number, password) do
-    # user = get_user_by(account_code: account_code)
+  def get_user_by_account(account_number) do
+    query =
+      from u in User,
+        join: a in assoc(u, :account),
+        where: a.account_number == ^account_number,
+        preload: [account: a]
 
-    # account = Banking.get_account_by(account_number: account_number)
-    account = Banking.get_user_account!(account_number: account_number)
-    IO.puts(account.account_number)
-    {:ok, account}
-    # cond do
-    #   user && Pbkdf2.verify_pass(password, user.password_hash) ->
-    #     {:ok, user}
+    Repo.one(query)
+  end
 
-    #   user ->
-    #     {:error, :unauthorized}
+  def sign_in(account_number, password) do
+    user = get_user_by_account(account_number)
 
-    #   true ->
-    #     Pbkdf2.no_user_verify()
-    #     {:error, :not_found}
-    # end
+    cond do
+      user && Pbkdf2.verify_pass(password, user.password_hash) ->
+        # {:ok, user}
+        token = Authenticator.generate_token(user)
+        Repo.insert(Ecto.build_assoc(user, :auth_tokens, %{token: token}))
+
+      user ->
+        {:error, :unauthorized}
+
+      true ->
+        Pbkdf2.no_user_verify()
+        {:error, :not_found}
+    end
+  end
+
+  def sign_out(conn) do
+    case Authenticator.get_auth_token(conn) do
+      {:ok, token} ->
+        case Repo.get_by(AuthToken, %{token: token}) do
+          nil -> {:error, :not_found}
+          auth_token -> Repo.delete(auth_token)
+        end
+
+      error ->
+        error
+    end
   end
 end
