@@ -5,10 +5,10 @@ defmodule StoneChallenge.Accounts.User do
   schema "users" do
     field :name, :string
     field :email, :string
-    field :account_code, :string
     field :password, :string, virtual: true
     field :password_hash, :string
 
+    has_one :account, StoneChallenge.Banking.Account
     timestamps()
   end
 

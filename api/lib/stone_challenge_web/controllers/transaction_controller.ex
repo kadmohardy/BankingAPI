@@ -3,7 +3,7 @@ defmodule StoneChallengeWeb.TransactionController do
 
   alias StoneChallenge.Banking
   alias StoneChallenge.Banking.Transaction
-
+  require Logger
   # plug(:authenticate when action in [:index, :show])
 
   def show(conn, _params) do
@@ -20,12 +20,16 @@ defmodule StoneChallengeWeb.TransactionController do
     |> render(StoneChallengeWeb.TransactionView, "index.json", transactions: transactions)
   end
 
-  def create(conn, params) do
+  def create(
+        conn,
+        params
+      ) do
     case Banking.register_transaction(params) do
-      {:ok, user} ->
+      {:ok, transaction} ->
+        Logger.info("Transaçao realizada com sucesso: #{inspect(transaction)}")
+
         conn
-        |> StoneChallengeWeb.Auth.login(user)
-        |> render(StoneChallengeWeb.UserView, "create.json", user: user)
+        |> render(StoneChallengeWeb.TransactionView, "create.json", transaction: transaction)
 
       {:error, %Ecto.Changeset{} = changeset} ->
         conn

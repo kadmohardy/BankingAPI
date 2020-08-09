@@ -3,17 +3,23 @@ defmodule StoneChallenge.Banking.Account do
   import Ecto.Changeset
 
   schema "accounts" do
-    field :code, :string
+    field :account_number, :string
     field :balance, :integer
-    field :user_id, :integer
+    field :user_id, :id
+    # belongs_to :user, StoneChallenge.Accounts.User
 
     timestamps()
   end
 
   def changeset(account, params \\ %{}) do
     account
-    |> cast(params, [:code, :user_id])
-    |> validate_required([:code, :user_id])
-    |> unique_constraint([:code, :user_id])
+    |> cast(params, [:account_number])
+    |> validate_required([:account_number])
+    |> unique_constraint([:account_number])
+  end
+
+  def update_changeset(account, params \\ %{}) do
+    account
+    |> cast(params, [:balance])
   end
 end

@@ -1,15 +1,12 @@
 defmodule StoneChallengeWeb.UserController do
   use StoneChallengeWeb, :controller
-
+  require Logger
   alias StoneChallenge.Accounts
-  alias StoneChallenge.Accounts.User
-  alias StoneChallenge.Helper.BankingHelper
-  alias StoneChallenge.Banking
 
-  plug(:authenticate when action in [:index, :show])
+  # plug(:authenticate when action in [:index, :show])
 
-  def show(conn, _params) do
-    user = Accounts.get_user("1")
+  def show(conn, params) do
+    user = Accounts.get_user("27")
 
     conn
     |> render(StoneChallengeWeb.UserView, "show.json", user: user)
@@ -23,26 +20,21 @@ defmodule StoneChallengeWeb.UserController do
   end
 
   def create(conn, params) do
-    case Accounts.register_user(params) do
+    case Accounts.register_user_and_account(params) do
       {:ok, user} ->
-        account_number = BankingHelper.generate_account_number(user.id)
+        Logger.info("Deleting user from the system: #{inspect(user)}")
 
-        account_params = %{code: account_number, user_id: user.id}
+        json(conn, %{id: "messenger"})
 
-        case Banking.register_account(account_params) do
-          {:ok, _account} ->
-            conn
-            |> StoneChallengeWeb.Auth.login(user)
-            |> render(StoneChallengeWeb.UserView, "create.json", user: user)
+      # conn
+      # |> StoneChallengeWeb.Auth.login(user)
+      # |> render(StoneChallengeWeb.UserView, "create.json", user: user)
 
-          {:error, %Ecto.Changeset{} = changeset} ->
-            conn
-            |> render(StoneChallengeWeb.ErrorView, "401.json", message: changeset)
-        end
-
-      {:error, %Ecto.Changeset{} = changeset} ->
+      {:error, _} ->
         conn
-        |> render(StoneChallengeWeb.ErrorView, "401.json", message: changeset)
+        |> render(StoneChallengeWeb.ErrorView, "401.json",
+          message: "Não foi possível realizar o cadastro. Email já cadastrado."
+        )
     end
   end
 

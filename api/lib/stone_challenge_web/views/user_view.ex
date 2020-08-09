@@ -24,8 +24,7 @@ defmodule StoneChallengeWeb.UserView do
     %{
       id: user.id,
       name: user.name,
-      email: user.email,
-      account_code: user.account_code
+      email: user.email
       # inserted_at: user.inserted_at,
       # updated_at: user.updated_at
     }

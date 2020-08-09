@@ -1,8 +1,11 @@
 defmodule StoneChallengeWeb.SessionController do
   use StoneChallengeWeb, :controller
 
-  def create(conn, %{"session" => %{"account_code" => account_code, "password" => password}}) do
-    case StoneChallenge.Accounts.authenticate_by_account_code_and_password(account_code, password) do
+  def create(conn, %{"account_number" => account_number, "password" => password}) do
+    case StoneChallenge.Accounts.authenticate_by_account_number_and_password(
+           account_number,
+           password
+         ) do
       {:ok, user} ->
         conn
         |> StoneChallengeWeb.Auth.login(user)

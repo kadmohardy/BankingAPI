@@ -4,8 +4,9 @@ defmodule StoneChallenge.Repo.Migrations.CreateTransactions do
   def change do
     create table(:transactions) do
       add :amount, :integer
-      add :transaction_types_id, references(:transaction_types)
+      add :type, :integer
       add :user_id, references(:users)
+      add :target_account_number, :string
 
       timestamps()
     end
