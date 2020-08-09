@@ -1,4 +1,5 @@
 defmodule StoneChallenge.Services.Authenticator do
+  require Logger
   @seed "stone user token"
 
   @secret "CHANGE_ME_k7kTxvFAgeBvAVA0OR1vkPbTi8mZ5m"

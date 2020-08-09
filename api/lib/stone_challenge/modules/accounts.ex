@@ -104,9 +104,13 @@ defmodule StoneChallenge.Accounts do
   def sign_out(conn) do
     case Authenticator.get_auth_token(conn) do
       {:ok, token} ->
-        case Repo.get_by(AuthToken, %{token: token}) do
-          nil -> {:error, :not_found}
-          auth_token -> Repo.delete(auth_token)
+        # case Repo.get_by(AuthToken, %{token: token}) do
+        case StoneChallenge.Tokens.get_token_by(%{token: token}) do
+          nil ->
+            {:error, :not_found}
+
+          auth_token ->
+            StoneChallenge.Tokens.remove_token(auth_token)
         end
 
       error ->

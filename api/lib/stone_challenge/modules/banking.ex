@@ -74,6 +74,8 @@ defmodule StoneChallenge.Banking do
         user.account.balance < amount ->
           {:error, :not_have_money}
 
+        # Logger.info("Deleting user from the system: #{inspect(user.account.balance)}")
+
         # Do bank draft
         type == 1 ->
           case bank_draft(user.account, amount) do

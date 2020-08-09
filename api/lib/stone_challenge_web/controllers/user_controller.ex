@@ -3,8 +3,6 @@ defmodule StoneChallengeWeb.UserController do
   require Logger
   alias StoneChallenge.Accounts
 
-  # plug(:authenticate when action in [:index, :show])
-
   def show(conn, params) do
     user = Accounts.get_user("27")
 
@@ -30,15 +28,6 @@ defmodule StoneChallengeWeb.UserController do
         |> render(StoneChallengeWeb.ErrorView, "401.json",
           message: "Não foi possível realizar o cadastro. Email já cadastrado."
         )
-    end
-  end
-
-  defp authenticate(conn, _opts) do
-    if conn.assigns.curret_user do
-      conn
-    else
-      conn
-      |> halt()
     end
   end
 end

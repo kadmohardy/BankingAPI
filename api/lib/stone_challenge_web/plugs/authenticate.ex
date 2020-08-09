@@ -5,11 +5,9 @@ defmodule StoneChallengeWeb.Plugs.Authenticate do
   def init(opts), do: opts
 
   def call(conn, _default) do
-    Logger.info("TO NO PLUG AUTH ")
-
     case StoneChallenge.Services.Authenticator.get_auth_token(conn) do
       {:ok, token} ->
-        case StoneChallenge.AuthTokens.get_token_by(%{token: token, revoked: false}) do
+        case StoneChallenge.Tokens.get_token_by(%{token: token, revoked: false}) do
           nil -> unauthorized(conn)
           auth_token -> authorized(conn, auth_token.user)
         end
@@ -27,6 +25,7 @@ defmodule StoneChallengeWeb.Plugs.Authenticate do
   end
 
   defp unauthorized(conn) do
+    Logger.info("################")
     conn |> send_resp(401, "Unauthorized") |> halt()
   end
 end

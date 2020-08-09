@@ -15,14 +15,14 @@ defmodule StoneChallengeWeb.SessionController do
       {:error, :not_found} ->
         conn
         |> put_status(:unauthorized)
-        |> render("401.json", message: "Invalid account/password combination")
+        |> render("401.json", message: "Usuário/Senha invalido.")
     end
   end
 
   def delete(conn, _) do
     case StoneChallenge.Accounts.sign_out(conn) do
       {:error, reason} -> conn |> send_resp(400, reason)
-      {:ok, _} -> conn |> send_resp(204, "")
+      {:ok, _} -> conn |> send_resp(204, "Sign out realizado com sucesso.")
     end
   end
 end

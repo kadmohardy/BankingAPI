@@ -23,4 +23,8 @@ defmodule StoneChallenge.Tokens do
   def list_tokens do
     Repo.all(AuthToken)
   end
+
+  def remove_token(%AuthToken{} = auth_token) do
+    Repo.delete(auth_token)
+  end
 end

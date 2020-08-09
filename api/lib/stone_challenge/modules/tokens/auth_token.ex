@@ -3,10 +3,11 @@ defmodule StoneChallenge.AuthToken do
   import Ecto.Changeset
 
   schema "auth_tokens" do
+    belongs_to :user, StoneChallenge.Accounts.User
+
     field :revoked, :boolean, default: false
     field :revoked_at, :utc_datetime
     field :token, :string
-    field :user_id, :id
 
     timestamps()
   end

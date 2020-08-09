@@ -1,36 +1,27 @@
 defmodule StoneChallengeWeb.Router do
   use StoneChallengeWeb, :router
 
-  # pipeline :browser do
-  #   plug :accepts, ["html"]
-  #   plug :fetch_session
-  #   plug :fetch_flash
-  #   plug :protect_from_forgery
-  #   plug :put_secure_browser_headers
-  #   plug StoneChallengeWeb.Auth
-  # end
-  # pipeline :authenticate do
-  #   plug StoneChallengeWeb.Plugs.Authenticate
-  # end
-
-  pipeline :api do
+  # Define pipeline for authenticate routes
+  pipeline :authenticate do
     plug :accepts, ["json"]
     plug StoneChallengeWeb.Plugs.Authenticate
   end
 
-  # scope "/", StoneChallengeWeb do
-  #   pipe_through :browser
-
-  #   get "/", PageController, :index
-  # end
+  # Define pipeline for public routes
+  pipeline :public do
+    plug :accepts, ["json"]
+  end
 
   # Other scopes may use custom stacks.
   scope "/api", StoneChallengeWeb do
-    pipe_through :api
+    pipe_through :public
+    post "/sessions", SessionController, :create
+    post "/users", UserController, :create
 
-    post "/sessions/sign_in", SessionController, :create
-    delete "/sessions/sign_out", SessionController, :delete
-    resources "/users", UserController, only: [:index, :show, :create]
+    pipe_through :authenticate
+    post "/transactions", TransactionController, :create
+    delete "/sessions", SessionController, :delete
+    resources "/users", UserController, only: [:index, :show]
     resources "/reports", ReportsController, only: [:index]
   end
 
