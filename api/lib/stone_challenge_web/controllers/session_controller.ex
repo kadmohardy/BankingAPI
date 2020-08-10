@@ -15,7 +15,7 @@ defmodule StoneChallengeWeb.SessionController do
       {:error, :not_found} ->
         conn
         |> put_status(:unauthorized)
-        |> render("401.json", message: "Usuário/Senha invalido.")
+        |> render(StoneChallengeWeb.SessionView, "401.json", message: "Usuário/Senha invalido.")
     end
   end
 

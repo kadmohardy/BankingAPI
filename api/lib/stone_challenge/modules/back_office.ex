@@ -1,12 +1,12 @@
 defmodule StoneChallenge.BackOffice do
   @moduledoc """
-  This module handle Accounts context
+  This module handle Back Office context
   """
   import Ecto.Query, warn: false
 
   require Logger
   alias StoneChallenge.Repo
-  alias StoneChallenge.Banking
+  alias StoneChallenge.Helper.StringsHelper
   alias StoneChallenge.Banking.Transaction
 
   def transactions_report(params) do
@@ -14,12 +14,15 @@ defmodule StoneChallenge.BackOffice do
 
     cond do
       type == "diary" ->
-        date = Map.get(params, "date")
-        diary_transactions_report(date)
+        year = Map.get(params, "year")
+        month = Map.get(params, "month")
+        day = Map.get(params, "day")
+        diary_transactions_report(day, month, year)
 
       type == "monthly" ->
         month = Map.get(params, "month")
-        monthly_transactions_report(month)
+        year = Map.get(params, "year")
+        monthly_transactions_report(month, year)
 
       type == "yearly" ->
         year = Map.get(params, "year")
@@ -28,58 +31,52 @@ defmodule StoneChallenge.BackOffice do
       type == "total" ->
         total_transactions_report()
     end
-
-    Logger.info("TYPE ============= #{inspect(params)}")
   end
 
-  defp diary_transactions_report(date) do
-    total = row_counts_by_date("2020-08-05") |> Repo.all() |> Map.new()
-
-    Logger.info("TYPE ============= #{inspect(total)}")
+  defp diary_transactions_report(day, month, year) do
+    period = StringsHelper.format_day_month_and_year(day, month, year)
+    row_counts_by_day(period) |> Repo.all() |> Map.new()
   end
 
-  defp monthly_transactions_report(month) do
-    # Logger.info("TYPE ============= DATA DE TESTE#{inspect(teste)}")
+  defp monthly_transactions_report(month, year) do
+    period = StringsHelper.format_month_and_year(month, year)
+    row_counts_by_month(period) |> Repo.all() |> Map.new()
   end
 
   defp yearly_transactions_report(year) do
-    # row_counts_by_date() |> Repo.all() |> Map.new()
+    row_counts_by_year(year) |> Repo.all() |> Map.new()
   end
 
   defp total_transactions_report() do
     Repo.all(from t in Transaction, select: sum(t.amount))
   end
 
-  @doc "to_char function for formatting datetime as dd MON YYYY"
   defmacro to_char(field, format) do
     quote do
       fragment("to_char(?, ?)", unquote(field), unquote(format))
     end
   end
 
-  @doc "Builds a query with row counts per inserted_at date"
-  def row_counts_by_date(date) do
+  defp row_counts_by_day(period) do
     from record in Transaction,
-      group_by: to_char(record.inserted_at, ^date),
-      select: {to_char(record.inserted_at, ^date), sum(record.amount)}
+      group_by: to_char(record.inserted_at, "dd-mm-YYYY"),
+      where:
+        to_char(record.inserted_at, "dd-mm-YYYY") ==
+          ^period,
+      select: {"total", sum(record.amount)}
+  end
+
+  defp row_counts_by_month(period) do
+    from record in Transaction,
+      group_by: to_char(record.inserted_at, "mm-YYYY"),
+      where: to_char(record.inserted_at, "mm-YYYY") == ^period,
+      select: {"total", sum(record.amount)}
+  end
+
+  defp row_counts_by_year(period) do
+    from record in Transaction,
+      group_by: to_char(record.inserted_at, "YYYY"),
+      where: to_char(record.inserted_at, "YYYY") == ^period,
+      select: {"total", sum(record.amount)}
   end
 end
-
-# defmodule CountByDateQuery do
-#   import Ecto.Query
-
-#   @doc "to_char function for formatting datetime as dd MON YYYY"
-#   defmacro to_char(field, format) do
-#     quote do
-#       fragment("to_char(?, ?)", unquote(field), unquote(format))
-#     end
-#   end
-
-#   @doc "Builds a query with row counts per inserted_at date"
-#   def row_counts_by_date do
-#     from record in SomeTable,
-#     group_by: to_char(record.inserted_at, "dd Mon YYYY"),
-#     select: {to_char(record.inserted_at, "dd Mon YYYY"), count(record.id)}
-#   end
-
-# end

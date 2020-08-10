@@ -8,12 +8,15 @@ defmodule StoneChallengeWeb.ReportsController do
 
   def index(conn, params) do
     case BackOffice.transactions_report(params) do
-      {:ok, _} ->
+      nil ->
         conn
+        |> render(StoneChallengeWeb.ReportsView, "401.json",
+          message: "Periodo informado inválido."
+        )
 
-      {:error, _} ->
+      total ->
         conn
-        # Logger.info("Deleting user from the system: #{inspect(params)}")
+        |> render(StoneChallengeWeb.ReportsView, "show.json", total: total)
     end
   end
 end
