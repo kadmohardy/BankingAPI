@@ -4,6 +4,7 @@ defmodule StoneChallenge.Tokens do
 
   alias StoneChallenge.Repo
   alias StoneChallenge.AuthToken
+  alias StoneChallenge.Accounts.User
 
   alias StoneChallenge.Helper.BankingHelper
 
@@ -26,5 +27,9 @@ defmodule StoneChallenge.Tokens do
 
   def remove_token(%AuthToken{} = auth_token) do
     Repo.delete(auth_token)
+  end
+
+  def register_token(%User{} = user, token) do
+    Repo.insert(Ecto.build_assoc(user, :auth_tokens, %{token: token}))
   end
 end

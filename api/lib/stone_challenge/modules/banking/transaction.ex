@@ -15,6 +15,7 @@ defmodule StoneChallenge.Banking.Transaction do
   def changeset(transaction, params \\ %{}) do
     transaction
     |> cast(params, [:amount, :type, :target_account_number, :user_id])
-    |> validate_required([:amount, :type, :target_account_number])
+    |> validate_required([:amount, :type, :target_account_number, :user_id])
+    |> validate_inclusion(:type, 1..2)
   end
 end

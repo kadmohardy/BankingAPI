@@ -24,6 +24,7 @@ defmodule StoneChallenge.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import StoneChallenge.DataCase
+      import StoneChallenge.TestHelpers
     end
   end
 

@@ -7,7 +7,7 @@ defmodule StoneChallenge.Accounts do
   alias StoneChallenge.Accounts.User
   alias StoneChallenge.Banking
   alias StoneChallenge.Services.Authenticator
-
+  alias StoneChallenge.Tokens
   require Logger
 
   def get_user(id) do
@@ -84,13 +84,17 @@ defmodule StoneChallenge.Accounts do
   end
 
   def sign_in(account_number, password) do
+    Logger.info("Testando sign in")
     user = get_user_by_account(account_number)
 
     cond do
       user && Pbkdf2.verify_pass(password, user.password_hash) ->
-        # {:ok, user}
         token = Authenticator.generate_token(user)
-        Repo.insert(Ecto.build_assoc(user, :auth_tokens, %{token: token}))
+
+        case Tokens.register_token(user, token) do
+          {:ok, token} -> {:ok, token}
+          {:error, _} -> {:error, :token_not_registered}
+        end
 
       user ->
         {:error, :unauthorized}
