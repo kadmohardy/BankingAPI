@@ -80,6 +80,28 @@ To make a bank transfer you need send a POST request to ````localhost:4000/sessi
 It`s important to note that transaction operations needs an authentication token to be realized.
 
 ### 1.4 Back Office
-  The API provide a set of very simplistic reports that inform the total traded per day, month and year. To  
+  The API provide a set of very simplistic reports that inform the total traded per day, month and year. To give diary report, the user needs make a GET request using the following route: 
+  ````localhost:4000/reports?type=diary&day=07&month=08&year=2020````
+  where ````type```` is the type of report (diary, monthly, yearly, or total), ````day````is day, ````month```` is a number of month and ````year````is year. 
+  
+  In the same way, for give monthly report, use
+  ````localhost:4000/reports?type=monthly&day=07&month=08````
+  and ````localhost:4000/reports?type=yearly&year=08````, for yearly report.
+  
+  Finally, to total reports, uses
+  ````localhost:4000/reports?type=total````
+  
+  The given response has following format
+  ````{
+    "data": {
+        "total": 2150
+    }
+  }
 
+## 2. Postman JSON 
+In the root of repository, we have a postman project that could be used to test API.
+
+## 3. Deployed version 
+The server was deployed on a digital ocean server. You can, vizualize on the following route.
+````localhost:4000````
 
