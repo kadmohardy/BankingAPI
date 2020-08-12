@@ -92,14 +92,20 @@ It`s important to note that transaction operations needs an authentication token
   ````localhost:4000/reports?type=total````
   
   The given response has following format
-  ````{
+  ````
+  {
     "data": {
         "total": 2150
     }
-  } ````
+  } 
+  ````
 
 ## 2. Postman JSON 
-In the root of repository, we have a postman project that could be used to test API.
+In the root of repository, we have a postman project name 
+```` 
+Stone.postman_collection.json 
+```` 
+that could be used to test API.
 
 ## 3. Deployed version 
 The server was deployed on a digital ocean server. You can, vizualize on the following route.
