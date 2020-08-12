@@ -96,7 +96,7 @@ It`s important to note that transaction operations needs an authentication token
     "data": {
         "total": 2150
     }
-  }
+  } ````
 
 ## 2. Postman JSON 
 In the root of repository, we have a postman project that could be used to test API.
