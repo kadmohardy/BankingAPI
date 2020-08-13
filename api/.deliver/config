@@ -1,10 +1,10 @@
 APP="phoenix_deploy"
 
-BUILD_HOST="localhost"
+BUILD_HOST="104.248.48.177"
 BUILD_USER="deploy"
 BUILD_AT="/tmp/edeliver/phoenix_deploy/builds"
 
-PRODUCTION_HOSTS="localhost"
+PRODUCTION_HOSTS="104.248.48.177"
 PRODUCTION_USER="deploy"
 DELIVER_TO="/deploy/phoenix_deploy"
 
