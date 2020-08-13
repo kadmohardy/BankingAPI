@@ -1,6 +1,21 @@
 defmodule StoneChallengeWeb.Router do
   use StoneChallengeWeb, :router
 
+  pipeline :browser do
+    plug(:accepts, ["html"])
+    plug(:fetch_session)
+    plug(:fetch_flash)
+    plug(:put_root_layout, {StoneChallengeWeb.LayoutView, :root})
+    plug(:protect_from_forgery)
+    plug(:put_secure_browser_headers)
+  end
+
+  scope "/", StoneChallengeWeb do
+    pipe_through(:browser)
+
+    get("/", PageController, :index)
+  end
+
   # Define pipeline for authenticate routes
   pipeline :authenticate do
     plug :accepts, ["json"]

@@ -5,7 +5,7 @@ config :stone_challenge, StoneChallenge.Repo,
   username: "postgres",
   password: "postgres",
   database: "stone_challenge_dev",
-  hostname: "localhost",
+  hostname: "104.248.48.177",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 

@@ -44,6 +44,8 @@ defmodule StoneChallenge.AccountsTest do
     end
 
     test "requer um password com tamanho maior que 6 digitos " do
+      Logger.debug("testing")
+
       attrs = Map.put(@valid_attrs, :password, "12345")
       {:error, changeset} = Accounts.register_user(attrs)
 
@@ -60,9 +62,17 @@ defmodule StoneChallenge.AccountsTest do
     end
 
     test "obtem usuario com senha correta", %{user: user} do
-      assert {:ok, auth_user} = Accounts.sign_in(user.email, @pass)
+      assert {:ok, auth_token} = Accounts.sign_in(user.account.account_number, @pass)
 
-      assert auth_user.id == user.id
+      assert String.length(auth_token.token) > 0
+    end
+
+    test "retorna usuario não autorizado com password invalido", %{user: user} do
+      assert {:error, :unauthorized} = Accounts.sign_in(user.account.account_number, "badpass")
+    end
+
+    test "retorna nao encontrado para usuario com conta inexistente" do
+      assert {:error, :not_found} = Accounts.sign_in("unknownuser", @pass)
     end
   end
 end
