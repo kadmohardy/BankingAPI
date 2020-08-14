@@ -3,13 +3,6 @@ defmodule StoneChallengeWeb.UserController do
   require Logger
   alias StoneChallenge.Accounts
 
-  def show(conn, params) do
-    user = Accounts.get_user("27")
-
-    conn
-    |> render(StoneChallengeWeb.UserView, "show.json", user: user)
-  end
-
   def index(conn, _params) do
     users = Accounts.list_users()
 

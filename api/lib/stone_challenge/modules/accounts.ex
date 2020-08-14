@@ -23,7 +23,9 @@ defmodule StoneChallenge.Accounts do
   end
 
   def list_users do
-    Repo.all(User)
+    query = from u in User, where: u.customer == true, preload: [:account]
+
+    Repo.all(query)
   end
 
   def change_user(%User{} = user) do

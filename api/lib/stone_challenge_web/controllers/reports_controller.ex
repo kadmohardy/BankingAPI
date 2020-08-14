@@ -4,8 +4,6 @@ defmodule StoneChallengeWeb.ReportsController do
 
   alias StoneChallenge.BackOffice
 
-  # plug(:authenticate when action in [:index, :show])
-
   def index(conn, params) do
     case BackOffice.transactions_report(conn, params) do
       {:error, :user_not_authorized} ->
