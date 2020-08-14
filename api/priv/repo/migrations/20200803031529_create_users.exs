@@ -6,6 +6,7 @@ defmodule StoneChallenge.Repo.Migrations.CreateUsers do
       add :name, :string
       add :email, :string, null: false
       add :password_hash, :string
+      add :customer, :boolean, default: true, null: false
 
       timestamps()
     end

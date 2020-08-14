@@ -2,11 +2,9 @@ defmodule StoneChallengeWeb.SessionController do
   use StoneChallengeWeb, :controller
   require Logger
 
-  def create(conn, %{"account_number" => account_number, "password" => password}) do
-    case StoneChallenge.Accounts.sign_in(
-           account_number,
-           password
-         ) do
+  # def create(conn, %{"account_number" => account_number, "password" => password}) do
+  def create(conn, params) do
+    case StoneChallenge.Accounts.sign_in(params) do
       {:ok, auth_token} ->
         conn
         |> put_status(:ok)

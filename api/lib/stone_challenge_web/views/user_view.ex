@@ -27,12 +27,29 @@ defmodule StoneChallengeWeb.UserView do
     }
   end
 
-  def user_json(user) do
+  def customer_user_json(user) do
     %{
       id: user.id,
       name: user.name,
       email: user.email,
+      customer: user.customer,
       account: user_account_json(user.account)
     }
+  end
+
+  def admin_user_json(user) do
+    %{
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      customer: user.customer
+    }
+  end
+
+  def user_json(user) do
+    cond do
+      user.customer == true -> customer_user_json(user)
+      true -> admin_user_json(user)
+    end
   end
 end

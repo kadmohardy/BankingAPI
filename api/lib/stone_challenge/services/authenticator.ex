@@ -4,8 +4,8 @@ defmodule StoneChallenge.Services.Authenticator do
 
   @secret "CHANGE_ME_k7kTxvFAgeBvAVA0OR1vkPbTi8mZ5m"
 
-  def generate_token(id) do
-    Phoenix.Token.sign(@secret, @seed, id, max_age: 86400)
+  def generate_token(user) do
+    Phoenix.Token.sign(@secret, @seed, user, max_age: 86400)
   end
 
   def verify_token(token) do

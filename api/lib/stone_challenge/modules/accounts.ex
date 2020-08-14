@@ -47,21 +47,37 @@ defmodule StoneChallenge.Accounts do
   end
 
   def register_user_and_account(attrs \\ %{}) do
-    Repo.transaction(fn ->
-      user =
+    is_customer = Map.get(attrs, "customer")
+
+    cond do
+      is_customer == true ->
+        Repo.transaction(fn ->
+          user =
+            case register_user(attrs) do
+              {:ok, user} ->
+                user
+
+              {:error, changeset} ->
+                Repo.rollback({:user, changeset})
+                {:error, :error_in_sign_up}
+            end
+
+          case Banking.register_account(user) do
+            {:ok, _account} ->
+              {:ok, get_user_account(user.id)}
+
+            {:error, changeset} ->
+              Repo.rollback({:account, changeset})
+              {:error, :error_in_sign_up}
+          end
+        end)
+
+      true ->
         case register_user(attrs) do
-          {:ok, user} -> user
-          {:error, changeset} -> Repo.rollback({:user, changeset})
+          {:ok, user} -> {:ok, user}
+          {:error, _changeset} -> {:error, :error_in_sign_up}
         end
-
-      case Banking.register_account(user) do
-        {:ok, _account} ->
-          get_user_account(user.id)
-
-        {:error, changeset} ->
-          Repo.rollback({:account, changeset})
-      end
-    end)
+    end
   end
 
   def get_user_account(id) do
@@ -83,9 +99,18 @@ defmodule StoneChallenge.Accounts do
     Repo.one(query)
   end
 
-  def sign_in(account_number, password) do
+  def sign_in(attrs) do
     Logger.info("Testando sign in")
-    user = get_user_by_account(account_number)
+
+    account_number = Map.get(attrs, "account_number")
+    email = Map.get(attrs, "email")
+    password = Map.get(attrs, "password")
+
+    user =
+      case account_number do
+        nil -> get_user_by(%{email: email})
+        _ -> get_user_by_account(account_number)
+      end
 
     cond do
       user && Pbkdf2.verify_pass(password, user.password_hash) ->
@@ -108,7 +133,6 @@ defmodule StoneChallenge.Accounts do
   def sign_out(conn) do
     case Authenticator.get_auth_token(conn) do
       {:ok, token} ->
-        # case Repo.get_by(AuthToken, %{token: token}) do
         case StoneChallenge.Tokens.get_token_by(%{token: token}) do
           nil ->
             {:error, :not_found}
@@ -121,4 +145,17 @@ defmodule StoneChallenge.Accounts do
         error
     end
   end
+
+  # def get_user_role(conn, params) do
+  #   case StoneChallenge.Services.Authenticator.get_auth_token(conn) do
+  #     {:ok, token} ->
+  #       case StoneChallenge.Tokens.get_token_by(%{token: token, revoked: false}) do
+  #         nil -> unauthorized(conn)
+  #         auth_token -> authorized(conn, auth_token.user)
+  #       end
+
+  #     _ ->
+  #       unauthorized(conn)
+  #   end
+  # end
 end

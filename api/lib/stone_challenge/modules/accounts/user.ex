@@ -5,6 +5,7 @@ defmodule StoneChallenge.Accounts.User do
   schema "users" do
     field :name, :string
     field :email, :string
+    field :customer, :boolean
     field :password, :string, virtual: true
     field :password_hash, :string
 
@@ -15,8 +16,8 @@ defmodule StoneChallenge.Accounts.User do
 
   def changeset(user, params \\ %{}) do
     user
-    |> cast(params, [:name, :email, :password])
-    |> validate_required([:name, :email, :password])
+    |> cast(params, [:name, :email, :customer, :password])
+    |> validate_required([:name, :email, :customer, :password])
     |> validate_format(:email, ~r/@/)
     |> unique_constraint(:email)
   end

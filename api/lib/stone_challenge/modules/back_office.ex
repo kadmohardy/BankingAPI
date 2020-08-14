@@ -9,27 +9,32 @@ defmodule StoneChallenge.BackOffice do
   alias StoneChallenge.Helper.StringsHelper
   alias StoneChallenge.Banking.Transaction
 
-  def transactions_report(params) do
+  def transactions_report(conn, params) do
     type = Map.get(params, "type")
 
+    is_customer = conn.assigns.signed_user.customer
+
     cond do
+      is_customer == true ->
+        {:error, :user_not_authorized}
+
       type == "diary" ->
         year = Map.get(params, "year")
         month = Map.get(params, "month")
         day = Map.get(params, "day")
-        diary_transactions_report(day, month, year)
+        {:ok, diary_transactions_report(day, month, year)}
 
       type == "monthly" ->
         month = Map.get(params, "month")
         year = Map.get(params, "year")
-        monthly_transactions_report(month, year)
+        {:ok, monthly_transactions_report(month, year)}
 
       type == "yearly" ->
         year = Map.get(params, "year")
-        yearly_transactions_report(year)
+        {:ok, yearly_transactions_report(year)}
 
       type == "total" ->
-        total_transactions_report()
+        {:ok, total_transactions_report()}
     end
   end
 

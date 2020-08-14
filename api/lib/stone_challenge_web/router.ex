@@ -19,12 +19,14 @@ defmodule StoneChallengeWeb.Router do
   # Define pipeline for authenticate routes
   pipeline :authenticate do
     plug :accepts, ["json"]
+    plug :fetch_session
     plug StoneChallengeWeb.Plugs.Authenticate
   end
 
   # Define pipeline for public routes
   pipeline :public do
     plug :accepts, ["json"]
+    plug :fetch_session
   end
 
   # Other scopes may use custom stacks.
