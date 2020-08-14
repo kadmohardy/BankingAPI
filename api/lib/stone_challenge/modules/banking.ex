@@ -69,11 +69,8 @@ defmodule StoneChallenge.Banking do
     user_id = conn.assigns.signed_user.id
 
     user = Accounts.get_user_account(user_id)
-    Logger.info("TESTE USER =>>>>>>>>>>>> #{inspect(user)}")
 
     if user != nil do
-      Logger.info("TESTE USER =>>>>>>>>>>>> 222222222#{inspect(user.account)}")
-
       cond do
         # Verify if user has money
         user.account.balance < amount ->

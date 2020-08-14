@@ -25,7 +25,6 @@ defmodule StoneChallengeWeb.Plugs.Authenticate do
   end
 
   defp unauthorized(conn) do
-    Logger.info("################")
     conn |> send_resp(401, "Unauthorized") |> halt()
   end
 end

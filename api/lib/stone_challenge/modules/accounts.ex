@@ -102,8 +102,6 @@ defmodule StoneChallenge.Accounts do
   end
 
   def sign_in(attrs) do
-    Logger.info("Testando sign in")
-
     account_number = Map.get(attrs, "account_number")
     email = Map.get(attrs, "email")
     password = Map.get(attrs, "password")
