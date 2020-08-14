@@ -79,13 +79,13 @@ To make a bank transfer you need send a POST request to ````localhost:4000/sessi
 
 ````
 {
-	"amount": 50,                       // amount of money
+	"amount": 50,                       // amount of money (integers values)
 	"type": 2,                          // type of transaction (1: bank draft, 2: bank transfer)    
 	"target_account_number": "197004"   // target account number (if bank draft, target_account_number is same of account_number of user that make transaction)
 }
 ````
 
-It`s important to note that transaction operations needs an authentication token to be realized.
+It`s important to note that transaction operations needs an authentication token to be realized. We using integers number for money amount in order to simplify transactions process.
 
 ### 1.4 Back Office
   The API provide a set of very simplistic reports that inform the total traded per day, month and year. To give diary report, the user needs make a GET request using the following route: 
@@ -107,9 +107,11 @@ It`s important to note that transaction operations needs an authentication token
     }
   } 
   ````
+  
+Note that user should be a backoffice user in order to have access to reports.
 
 ## 2. Postman JSON 
-In the root of repository, we have a postman project name 
+In the root of this repository, we have a postman project name 
 ```` 
 Stone.postman_collection.json 
 ```` 
