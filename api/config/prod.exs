@@ -11,7 +11,7 @@ use Mix.Config
 # before starting your production server.
 config :stone_challenge, StoneChallengeWeb.Endpoint,
   load_from_system_env: true,
-  url: [scheme: "http", host: "localhost", port: 4000],
+  http: [port: 4000],
   cache_static_manifest: "priv/static/cache_manifest.json",
   secret_key_base: Map.fetch!(System.get_env(), "SECRET_KEY_BASE"),
   server: true
