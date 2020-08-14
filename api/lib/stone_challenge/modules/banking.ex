@@ -59,28 +59,36 @@ defmodule StoneChallenge.Banking do
   end
 
   def register_transaction(
+        conn,
         %{
-          "user_id" => user_id,
           "amount" => amount,
           "type" => type,
           "target_account_number" => target_account_number
-        } = params
+        }
       ) do
+    user_id = conn.assigns.signed_user.id
+
     user = Accounts.get_user_account(user_id)
+    Logger.info("TESTE USER =>>>>>>>>>>>> #{inspect(user)}")
 
     if user != nil do
+      Logger.info("TESTE USER =>>>>>>>>>>>> 222222222#{inspect(user.account)}")
+
       cond do
         # Verify if user has money
         user.account.balance < amount ->
           {:error, :not_have_money}
 
-        # Logger.info("Deleting user from the system: #{inspect(user.account.balance)}")
-
         # Do bank draft
         type == 1 ->
           case bank_draft(user.account, amount) do
             {:ok, _} ->
-              create_transaction(params)
+              create_transaction(%{
+                amount: amount,
+                type: type,
+                target_account_number: user.account.account_number,
+                user_id: user.id
+              })
           end
 
         # Do bank transfer
@@ -89,7 +97,12 @@ defmodule StoneChallenge.Banking do
 
           case bank_transfer(user.account, target_account, amount) do
             {:ok, _} ->
-              create_transaction(params)
+              create_transaction(%{
+                amount: amount,
+                type: type,
+                target_account_number: target_account_number,
+                user_id: user.id
+              })
           end
       end
     else

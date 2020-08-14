@@ -16,7 +16,7 @@ defmodule StoneChallengeWeb.TransactionController do
         conn,
         params
       ) do
-    case Banking.register_transaction(params) do
+    case Banking.register_transaction(conn, params) do
       {:ok, transaction} ->
         Logger.info("Transaçao realizada com sucesso: #{inspect(transaction)}")
 
