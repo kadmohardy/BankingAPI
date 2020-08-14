@@ -119,6 +119,6 @@ that could be used to test API.
 
 ## 3. Deployed version 
 The server was deployed on a digital ocean server. We have a docker container running a PostGres db instance. You can vizualize on the following route.
-````http://104.248.48.177/````. For API requests use
+http://104.248.48.177 [StoneChallengeAPI](http://104.248.48.177). For API requests use 
 
 ````http://104.248.48.177/api````
