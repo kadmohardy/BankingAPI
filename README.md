@@ -18,7 +18,9 @@ To register a new user you can send a POST request to ````localhost:4000/users``
 {
 	"name": "User Name",
 	"email": "useremail@gmail.com", 
-	"password": "user password"
+	"password": "user password", 
+	"customer": true (for customer) || false (for backoffice admin)	
+	
 }
 ````
 
@@ -32,18 +34,26 @@ Following, we have a example of response:
     "email": "joao10@gmail.com",
     "id": 23,
     "name": "Joao10"
+    "customer": true
 }
 ````
 
 ### 1.2 Authentication
 
-To authenticate a user it is necessary give authentication token you can send a POST request to ````localhost:4000/sessions```` with following json body
+To authenticate a customer user it is necessary give authentication token you can send a POST request to ````localhost:4000/sessions```` with following json body
 ````
 {
 	"account_number": "000000", 
-  "password": "user password"
+  	"password": "user password"
 }
+```` 
+and for admin user 
 ````
+{
+	"email": "user@email.com", 
+  	"password": "user password"
+}
+```` 
 
 After that, the user receives a authentication token, like this: 
 ````
@@ -59,7 +69,6 @@ We have two transaction types: bank draft and bank transfer. To make a bank tran
 
 ````
 {
-  "user_id": 3,                       // user id that make transaction
 	"amount": 50,                       // amount of money
 	"type": 1,                          // type of transaction (1: bank draft, 2: bank transfer)    
 	"target_account_number": "197003"   // target account number (if bank draft, target_account_number is same of account_number of user that make transaction)
@@ -70,7 +79,6 @@ To make a bank transfer you need send a POST request to ````localhost:4000/sessi
 
 ````
 {
-  "user_id": 3,                       // user id that make transaction
 	"amount": 50,                       // amount of money
 	"type": 2,                          // type of transaction (1: bank draft, 2: bank transfer)    
 	"target_account_number": "197004"   // target account number (if bank draft, target_account_number is same of account_number of user that make transaction)
@@ -108,6 +116,7 @@ Stone.postman_collection.json
 that could be used to test API.
 
 ## 3. Deployed version 
-The server was deployed on a digital ocean server. You can, vizualize on the following route.
-````localhost:4000````
+The server was deployed on a digital ocean server. We have a docker container running a PostGres db instance. You can vizualize on the following route.
+````http://104.248.48.177/````. For API requests use
 
+````http://104.248.48.177/api````
