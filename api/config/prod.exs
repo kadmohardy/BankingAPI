@@ -14,8 +14,7 @@ config :stone_challenge, StoneChallengeWeb.Endpoint,
   url: [scheme: "http", host: "localhost", port: 4000],
   cache_static_manifest: "priv/static/cache_manifest.json",
   secret_key_base: Map.fetch!(System.get_env(), "SECRET_KEY_BASE"),
-  server: true,
-
+  server: true
 
 # Do not print debug messages in production
 config :logger, level: :info
