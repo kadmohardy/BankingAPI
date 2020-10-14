@@ -9,8 +9,11 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
-
+# User.changeset %User{}, %{email: "kadmothadeu@gmail.com", first_name: "Kadmo", last_name: "Hardy", password:"napstera", password_hash: "napstera"}}
+#
 alias StoneChallenge.Banking
 ​ 
-Banking.create_transaction_type!("Saque")
-Banking.create_transaction_type!("Transferência")
+StoneChallenge.Repo.insert! User.changeset %User{}, %{email: "kadmothadeu@gmail.com", first_name: "Kadmo", last_name: "Hardy", password: "napstera", password_hash: "napstera"}
+
+# Banking.create_transaction_type!("Saque")
+# Banking.create_transaction_type!("Transferência")

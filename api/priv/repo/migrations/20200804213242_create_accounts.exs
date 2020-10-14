@@ -2,14 +2,12 @@ defmodule StoneChallenge.Repo.Migrations.CreateAccounts do
   use Ecto.Migration
 
   def change do
-    create table(:accounts) do
-      add :account_number, :string, size: 6
-      add :balance, :integer, default: 1000, null: false
-      add :user_id, references(:users)
+    create table(:accounts, primary_key: false) do
+      add :id, :uuid, primary_key: true
+      add :balance, :decimal, precision: 10, scale: 2, default: 1000, null: false
+      add :user_id, references(:users, on_delete: :delete_all, type: :uuid)
 
       timestamps()
     end
-
-    create(unique_index(:accounts, [:account_number]))
   end
 end

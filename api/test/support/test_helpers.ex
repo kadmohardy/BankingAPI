@@ -1,4 +1,7 @@
 defmodule StoneChallenge.TestHelpers do
+  @moduledoc """
+  This module handle tests auxiliary functions
+  """
   alias StoneChallenge.{
     Accounts,
     Banking

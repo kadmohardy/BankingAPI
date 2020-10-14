@@ -1,4 +1,4 @@
-defmodule StoneChallengeWeb.TransactionController do
+defmodule StoneChallengeWeb.BankDraftController do
   use StoneChallengeWeb, :controller
 
   alias StoneChallenge.Banking
@@ -6,18 +6,11 @@ defmodule StoneChallengeWeb.TransactionController do
 
   require Logger
 
-  def index(conn, _params) do
-    transactions = Banking.list_transactions()
-
-    conn
-    |> render("index.json", transactions: transactions)
-  end
-
   def create(
         conn,
         params
       ) do
-      with {:ok, transaction} <- Banking.register_transaction(conn, params) do
+      with {:ok, transaction} <- Banking.bank_draft_transaction(conn, params) do
         Logger.info("TRANSAÇÃO REALIZADA COM SUCESSO #{inspect(transaction)}")
 
         conn

@@ -20,7 +20,7 @@ defmodule StoneChallenge.Guardian do
     # found in the `"sub"` key. In `above subject_for_token/2` we returned
     # the resource id so here we'll rely on that to look it up.
     id = claims["sub"]
-    resource = Cupido.get_resource_by_id(id)
+    resource = StoneChallenge.get_resource_by_id(id)
     {:ok, resource}
   end
 

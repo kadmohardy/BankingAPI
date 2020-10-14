@@ -1,55 +1,57 @@
 defmodule StoneChallengeWeb.UserView do
   use StoneChallengeWeb, :view
   alias StoneChallenge.Accounts.User
+  require Logger
 
-  def first_name(%User{name: name}) do
-    name
-    |> String.split(" ")
-    |> Enum.at(0)
+  def render("account.json", %{account: account, user: user}) do
+    %{
+      account_id: account.id,
+      balance: account.balance,
+      user: user_json(user)
+    }
+  end
+
+  def render("user.json", %{user: user}) do
+    user_account_json(user)
   end
 
   def render("show.json", %{user: user}) do
-    user_json(user)
+    %{data: render_one(user, __MODULE__, "user.json")}
   end
 
   def render("index.json", %{users: users}) do
-    Enum.map(users, &user_json/1)
+    %{data: render_many(users, __MODULE__, "user.json")}
   end
 
   def render("create.json", %{user: user}) do
     user_json(user)
   end
 
-  def user_account_json(account) do
-    %{
-      account_number: account.account_number,
-      name: account.balance
-    }
-  end
-
-  def customer_user_json(user) do
-    %{
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      customer: user.customer,
-      account: user_account_json(user.account)
-    }
-  end
-
-  def admin_user_json(user) do
-    %{
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      customer: user.customer
-    }
-  end
-
   def user_json(user) do
-    cond do
-      user.customer == true -> customer_user_json(user)
-      true -> admin_user_json(user)
-    end
+    %{
+      id: user.id,
+      email: user.email,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      role: user.role
+    }
+  end
+
+  def user_account_json(user) do
+    %{
+      id: user.id,
+      email: user.email,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      role: user.role,
+      account: account_json(user.accounts)
+    }
+  end
+
+  def account_json(account) do
+    %{
+      account_id: account.id,
+      balance: account.balance
+    }
   end
 end

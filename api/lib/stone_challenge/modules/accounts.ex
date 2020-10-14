@@ -4,38 +4,56 @@ defmodule StoneChallenge.Accounts do
   """
   import Ecto.Query
   alias StoneChallenge.Repo
-  alias StoneChallenge.Accounts.User
+  alias StoneChallenge.Accounts.{Account, User}
   alias StoneChallenge.Banking
   alias StoneChallenge.Services.Authenticator
   alias StoneChallenge.Tokens
   require Logger
 
-  def get_user(id) do
-    Repo.get(User, id)
+  defp insert_user(attrs) do
+    %User{}
+    |> User.changeset(attrs)
   end
 
+  def create_user(attrs \\ %{}) do
+    transaction =
+      Ecto.Multi.new()
+      |> Ecto.Multi.insert(:user, insert_user(attrs))
+      |> Ecto.Multi.insert(:account, fn %{user: user} ->
+        user
+        |> Ecto.build_assoc(:accounts)
+        |> Account.changeset()
+      end)
+      |> Repo.transaction()
+
+    case transaction do
+      {:ok, operations} -> {:ok, operations.user, operations.account}
+      {:error, :user, changeset, _} -> {:error, changeset}
+    end
+  end
+
+  def get_user(id), do: Repo.get(User, id)
+
   def get_user!(id) do
-    Repo.get!(User, id)
+    Repo.get(User, id) |> Repo.preload(:accounts)
+  end
+
+  def get_users(id) do
+    Repo.all(User) |> Repo.preload(:accounts)
   end
 
   def get_user_by(params) do
-    Repo.get_by(User, params)
+    Repo.get_by(User, params) |> Repo.preload(:accounts)
   end
 
   def list_users do
-    query = from u in User, where: u.customer == true, preload: [:account]
+    query = from u in User, where: u.role == "customer", preload: [:accounts]
 
     Repo.all(query)
   end
 
   def change_user(%User{} = user) do
     User.changeset(user, %{})
-  end
-
-  def create_user(attrs \\ %{}) do
-    %User{}
-    |> User.changeset(attrs)
-    |> Repo.insert()
   end
 
   def change_registration(%User{} = user, params) do
@@ -46,40 +64,6 @@ defmodule StoneChallenge.Accounts do
     %User{}
     |> User.registration_changeset(attrs)
     |> Repo.insert()
-  end
-
-  def register_user_and_account(attrs \\ %{}) do
-    is_customer = Map.get(attrs, "customer")
-
-    cond do
-      is_customer == true ->
-        Repo.transaction(fn ->
-          user =
-            case register_user(attrs) do
-              {:ok, user} ->
-                user
-
-              {:error, changeset} ->
-                Repo.rollback({:user, changeset})
-                {:error, :error_in_sign_up}
-            end
-
-          case Banking.register_account(user) do
-            {:ok, _account} ->
-              get_user_account(user.id)
-
-            {:error, changeset} ->
-              Repo.rollback({:account, changeset})
-              {:error, :error_in_sign_up}
-          end
-        end)
-
-      true ->
-        case register_user(attrs) do
-          {:ok, user} -> {:ok, user}
-          {:error, _changeset} -> {:error, :error_in_sign_up}
-        end
-    end
   end
 
   def get_user_account(id) do
@@ -102,15 +86,10 @@ defmodule StoneChallenge.Accounts do
   end
 
   def sign_in(attrs) do
-    account_number = Map.get(attrs, "account_number")
     email = Map.get(attrs, "email")
     password = Map.get(attrs, "password")
 
-    user =
-      case account_number do
-        nil -> get_user_by(%{email: email})
-        _ -> get_user_by_account(account_number)
-      end
+    user = get_user_by(%{email: email})
 
     cond do
       user && Pbkdf2.verify_pass(password, user.password_hash) ->
@@ -118,15 +97,15 @@ defmodule StoneChallenge.Accounts do
 
         case Tokens.register_token(user, token) do
           {:ok, token} -> {:ok, token}
-          {:error, _} -> {:error, :token_not_registered}
+          {:error, _} -> {:error, "Error in token registered"}
         end
 
       user ->
-        {:error, :unauthorized}
+        {:error, "User/password are incorrects"}
 
       true ->
         Pbkdf2.no_user_verify()
-        {:error, :not_found}
+        {:error, "User not have account"}
     end
   end
 
@@ -145,17 +124,4 @@ defmodule StoneChallenge.Accounts do
         error
     end
   end
-
-  # def get_user_role(conn, params) do
-  #   case StoneChallenge.Services.Authenticator.get_auth_token(conn) do
-  #     {:ok, token} ->
-  #       case StoneChallenge.Tokens.get_token_by(%{token: token, revoked: false}) do
-  #         nil -> unauthorized(conn)
-  #         auth_token -> authorized(conn, auth_token.user)
-  #       end
-
-  #     _ ->
-  #       unauthorized(conn)
-  #   end
-  # end
 end

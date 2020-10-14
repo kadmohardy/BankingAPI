@@ -2,20 +2,21 @@ defmodule StoneChallenge.Banking.Transaction do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @primary_key {:id, :binary_id, autogerate: true}
+  @derive {Phoenix.Param, key: :id}
   schema "transactions" do
-    field :amount, :integer
-    field :type, :integer
-    field :target_account_number, :string
-
-    belongs_to :user, StoneChallenge.Accounts.User
+    field :account_from, :string
+    field :account_to, :string
+    field :amount, :decimal
+    field :type, :string
+    field :date, :date
 
     timestamps()
   end
 
   def changeset(transaction, params \\ %{}) do
     transaction
-    |> cast(params, [:amount, :type, :target_account_number, :user_id])
-    |> validate_required([:amount, :type, :target_account_number, :user_id])
-    |> validate_inclusion(:type, 1..2)
+    |> cast(params, [:account_from, :account_to, :amount, :type, :date])
+    |> validate_required([:account_from, :account_to, :amount, :type, :date])
   end
 end

@@ -1,14 +1,18 @@
 defmodule StoneChallenge.AuthToken do
+  @moduledoc """
+  This module handle token creation and validation
+  """
   use Ecto.Schema
   import Ecto.Changeset
 
+  @primary_key {:id, :binary_id, autogenerate: true}
+  @derive {Phoenix.Param, key: :id}
+  @foreign_key_type Ecto.UUID
   schema "auth_tokens" do
-    belongs_to :user, StoneChallenge.Accounts.User
-
     field :revoked, :boolean, default: false
     field :revoked_at, :utc_datetime
     field :token, :string
-
+    belongs_to :user, StoneChallenge.Accounts.User
     timestamps()
   end
 

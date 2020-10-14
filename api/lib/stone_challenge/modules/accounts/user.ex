@@ -2,24 +2,46 @@ defmodule StoneChallenge.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @primary_key {:id, :binary_id, autogenerate: true}
+  @derive {Phoenix.Param, key: :id}
   schema "users" do
-    field :name, :string
     field :email, :string
-    field :customer, :boolean
+    field :first_name, :string
+    field :last_name, :string
     field :password, :string, virtual: true
+    field :password_confirmation, :string, virtual: true
     field :password_hash, :string
+    field :role, :string, default: "customer"
 
-    has_one :account, StoneChallenge.Banking.Account
+    has_one :accounts, StoneChallenge.Accounts.Account
     has_many :auth_tokens, StoneChallenge.AuthToken
     timestamps()
   end
 
   def changeset(user, params \\ %{}) do
     user
-    |> cast(params, [:name, :email, :customer, :password])
-    |> validate_required([:name, :email, :customer, :password])
-    |> validate_format(:email, ~r/@/)
-    |> unique_constraint(:email)
+    |> cast(
+      params,
+      [:email, :first_name, :last_name, :password, :password_confirmation, :role]
+    )
+    |> validate_required([
+      :email,
+      :first_name,
+      :last_name,
+      :password,
+      :password_confirmation,
+      :role
+    ])
+    |> validate_format(:email, ~r/@/, message: "Invalid mail format")
+    |> update_change(:email, &String.downcase(&1))
+    |> validate_length(:password,
+      min: 6,
+      max: 50,
+      message: "Password should have between 6 and 50 characters"
+    )
+    |> validate_confirmation(:password, message: "Passwords are different")
+    |> unique_constraint(:email, message: "This mail address already used by an user")
+    |> put_pass_hash()
   end
 
   def registration_changeset(user, params) do

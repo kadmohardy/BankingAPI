@@ -1,17 +1,10 @@
-defmodule StoneChallengeWeb.TransactionController do
+defmodule StoneChallengeWeb.BankTransferController do
   use StoneChallengeWeb, :controller
 
   alias StoneChallenge.Banking
   action_fallback StoneChallengeWeb.FallbackController
 
   require Logger
-
-  def index(conn, _params) do
-    transactions = Banking.list_transactions()
-
-    conn
-    |> render("index.json", transactions: transactions)
-  end
 
   def create(
         conn,

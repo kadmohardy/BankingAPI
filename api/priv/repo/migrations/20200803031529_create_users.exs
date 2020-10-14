@@ -2,11 +2,13 @@ defmodule StoneChallenge.Repo.Migrations.CreateUsers do
   use Ecto.Migration
 
   def change do
-    create table(:users) do
-      add :name, :string
+    create table(:users, primary_key: false) do
+      add :id, :uuid, primary_key: true
       add :email, :string, null: false
+      add :first_name, :string
+      add :last_name, :string
+      add :role, :string
       add :password_hash, :string
-      add :customer, :boolean, default: true, null: false
 
       timestamps()
     end

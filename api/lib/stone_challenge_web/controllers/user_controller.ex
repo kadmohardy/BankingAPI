@@ -3,24 +3,27 @@ defmodule StoneChallengeWeb.UserController do
   require Logger
   alias StoneChallenge.Accounts
 
+  action_fallback StoneChallengeWeb.FallbackController
+
   def index(conn, _params) do
-    users = Accounts.list_users()
+    users = Accounts.get_users()
 
     conn
     |> render(StoneChallengeWeb.UserView, "index.json", users: users)
   end
 
   def create(conn, params) do
-    case Accounts.register_user_and_account(params) do
-      {:ok, user} ->
-        conn
-        |> render(StoneChallengeWeb.UserView, "create.json", user: user)
-
-      {:error, _} ->
-        conn
-        |> render(StoneChallengeWeb.ErrorView, "401.json",
-          message: "Não foi possível realizar o cadastro. Email já cadastrado."
-        )
+    with {:ok, user, account } <- Accounts.create_user(params) do
+      conn
+      |> put_status(:created)
+      #|> put_resp_header("location", Routes.user_path(conn, :show, id: user.id))
+      |> render(StoneChallengeWeb.UserView, "account.json", %{account: account, user: user})
     end
+  end
+
+  def show(conn, %{"id" => id}) do
+    user = Accounts.get_user!(id)
+    conn
+    |> render("show.json", user: user)
   end
 end

@@ -2,18 +2,14 @@ defmodule StoneChallengeWeb.SessionController do
   use StoneChallengeWeb, :controller
   require Logger
 
+  action_fallback StoneChallengeWeb.FallbackController
+
   # def create(conn, %{"account_number" => account_number, "password" => password}) do
   def create(conn, params) do
-    case StoneChallenge.Accounts.sign_in(params) do
-      {:ok, auth_token} ->
+    with {:ok, auth_token} <- StoneChallenge.Accounts.sign_in(params) do
         conn
         |> put_status(:ok)
         |> render(StoneChallengeWeb.SessionView, "show.json", auth_token: auth_token)
-
-      {:error, :not_found} ->
-        conn
-        |> put_status(:unauthorized)
-        |> render(StoneChallengeWeb.SessionView, "401.json", message: "Usuário/Senha invalido.")
     end
   end
 

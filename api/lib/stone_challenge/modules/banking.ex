@@ -8,9 +8,8 @@ defmodule StoneChallenge.Banking do
   require Logger
 
   alias StoneChallenge.Repo
-  alias StoneChallenge.Banking.Account
   alias StoneChallenge.Banking.Transaction
-  alias StoneChallenge.Accounts
+  alias StoneChallenge.Accounts.{Account, User}
   alias StoneChallenge.Helper.BankingHelper
 
   def get_account(id) do
@@ -29,7 +28,7 @@ defmodule StoneChallenge.Banking do
     Repo.all(Account)
   end
 
-  def register_account(%Accounts.User{} = user) do
+  def register_account(%User{} = user) do
     account_number = BankingHelper.generate_account_number(user.id)
     account_params = %{account_number: account_number, user_id: user.id}
 
@@ -73,8 +72,11 @@ defmodule StoneChallenge.Banking do
     if user != nil do
       cond do
         # Verify if user has money
+        amount <= 0 ->
+          {:error, "The value should be more than zero"}
+
         user.account.balance < amount ->
-          {:error, :not_have_money}
+          {:error, "You can`t have money"}
 
         # Do bank draft
         type == 1 ->
@@ -137,5 +139,38 @@ defmodule StoneChallenge.Banking do
     %Transaction{}
     |> Transaction.changeset(attrs)
     |> Repo.insert()
+  end
+
+
+  def bank_draft_transaction(
+        conn,
+        %{
+          "amount" => amount,
+        }
+      ) do
+    user = Accounts.get_user!(conn.assigns.signed_user.id)
+
+    if user != nil do
+      cond do
+        # Verify if user has money
+        amount <= 0 ->
+          {:error, "The value should be more than zero"}
+
+        user.account.balance < amount ->
+          {:error, "You can`t have money"}
+
+        case bank_draft(user.account, amount) do
+          {:ok, _} ->
+            create_transaction(%{
+              account_from: user.account.id,
+              account_to: user.account.id,
+              type: "bank_draft",
+              amount: amount,
+            })
+        end
+      end
+    else
+      {:error, "Invalid account"}
+    end
   end
 end
