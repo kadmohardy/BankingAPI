@@ -1,4 +1,4 @@
-defmodule StoneChallengeWeb.BankDraftView do
+defmodule StoneChallengeWeb.BankTransferView do
   use StoneChallengeWeb, :view
   require Logger
 

@@ -153,6 +153,9 @@ defmodule StoneChallenge.Banking do
     if account_to != nil do
       cond do
         # Verify if user has money
+        account_from.id == account_to.id ->
+          {:error, "You can't transfer money to your account."}
+
         amount <= 0 ->
           {:error, "The value should be more than zero"}
 
