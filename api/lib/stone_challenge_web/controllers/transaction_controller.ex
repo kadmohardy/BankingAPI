@@ -17,11 +17,11 @@ defmodule StoneChallengeWeb.TransactionController do
         conn,
         params
       ) do
-      with {:ok, transaction} <- Banking.register_transaction(conn, params) do
-        Logger.info("TRANSAÇÃO REALIZADA COM SUCESSO #{inspect(transaction)}")
+    with {:ok, transaction} <- Banking.register_transaction(conn, params) do
+      Logger.info("TRANSAÇÃO REALIZADA COM SUCESSO #{inspect(transaction)}")
 
-        conn
-        |> render("create.json", transaction: transaction)
-      end
+      conn
+      |> render("create.json", transaction: transaction)
+    end
   end
 end

@@ -10,11 +10,15 @@ defmodule StoneChallengeWeb.BankTransferController do
         conn,
         params
       ) do
-      with {:ok, transaction} <- Banking.register_transaction(conn, params) do
-        Logger.info("TRANSAÇÃO REALIZADA COM SUCESSO #{inspect(transaction)}")
+    with {:ok, account, transaction} <- Banking.bank_transfer_transaction(conn, params) do
+      Logger.info("TRANSAÇÃO REALIZADA COM SUCESSO #{inspect(transaction)}")
 
-        conn
-        |> render("create.json", transaction: transaction)
-      end
+      conn
+      |> render(
+        StoneChallengeWeb.BankDraftView,
+        "bank_transfer.json",
+        %{account: account, transaction: transaction}
+      )
+    end
   end
 end

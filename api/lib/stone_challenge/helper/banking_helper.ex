@@ -11,4 +11,8 @@ defmodule StoneChallenge.Helper.BankingHelper do
       "Transferência"
     end
   end
+
+  def is_negative_balance(balance, amount) do
+    Decimal.sub(balance, amount) |> Decimal.negative?()
+  end
 end

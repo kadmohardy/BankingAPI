@@ -36,7 +36,7 @@ defmodule StoneChallengeWeb.Router do
     post "/users", UserController, :create
     resources "/users", UserController, only: [:index, :show]
 
-    #pipe_through :authenticate
+    pipe_through :authenticate
     post "/transactions/draft", BankDraftController, :create
     post "/transactions/transfer", BankTransferController, :create
     delete "/sessions", SessionController, :delete

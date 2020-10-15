@@ -17,8 +17,9 @@ defmodule StoneChallenge.Tokens do
   end
 
   def get_token_by(params) do
-    Repo.get_by(AuthToken, params)
-    |> Repo.preload(:user)
+    token =
+      Repo.get_by(AuthToken, params)
+      |> Repo.preload([{:user, :accounts}])
   end
 
   def list_tokens do

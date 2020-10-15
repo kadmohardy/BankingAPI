@@ -4,12 +4,11 @@ defmodule StoneChallengeWeb.SessionController do
 
   action_fallback StoneChallengeWeb.FallbackController
 
-  # def create(conn, %{"account_number" => account_number, "password" => password}) do
   def create(conn, params) do
     with {:ok, auth_token} <- StoneChallenge.Accounts.sign_in(params) do
-        conn
-        |> put_status(:ok)
-        |> render(StoneChallengeWeb.SessionView, "show.json", auth_token: auth_token)
+      conn
+      |> put_status(:ok)
+      |> render(StoneChallengeWeb.SessionView, "show.json", auth_token: auth_token)
     end
   end
 

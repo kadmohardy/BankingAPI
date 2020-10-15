@@ -9,7 +9,6 @@ defmodule StoneChallengeWeb.ErrorView do
     %{errors: %{detail: message}}
   end
 
-
   def render("error_message.json", %{message: message}) do
     %{message: message}
   end

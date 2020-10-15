@@ -15,6 +15,11 @@ defmodule StoneChallenge.Accounts do
     |> User.changeset(attrs)
   end
 
+  def update_account(%Account{} = account, attrs) do
+    account
+    |> Account.changeset(attrs)
+  end
+
   def create_user(attrs \\ %{}) do
     transaction =
       Ecto.Multi.new()
@@ -30,6 +35,12 @@ defmodule StoneChallenge.Accounts do
       {:ok, operations} -> {:ok, operations.user, operations.account}
       {:error, :user, changeset, _} -> {:error, changeset}
     end
+  end
+
+  def get_account(id), do: Repo.get(Account, id)
+
+  def get_account!(id) do
+    Repo.get(Account, id) |> Repo.preload(:user)
   end
 
   def get_user(id), do: Repo.get(User, id)
@@ -52,9 +63,14 @@ defmodule StoneChallenge.Accounts do
     Repo.all(query)
   end
 
-  def change_user(%User{} = user) do
-    User.changeset(user, %{})
-  end
+  # def change_user(%User{} = user) do
+  #   User.changeset(user, %{})
+  # end
+
+  # def update_account_balance(%Account{} = account, amount) do
+  #   Account.update_changeset(%{balance: Decimal.sub(user_account.balance, amount)})
+  #     |> Repo.update!()
+  # end
 
   def change_registration(%User{} = user, params) do
     User.registration_changeset(user, params)
@@ -90,6 +106,7 @@ defmodule StoneChallenge.Accounts do
     password = Map.get(attrs, "password")
 
     user = get_user_by(%{email: email})
+    Logger.info("TESTANDO LOGO #{inspect(user)}")
 
     cond do
       user && Pbkdf2.verify_pass(password, user.password_hash) ->
@@ -101,7 +118,7 @@ defmodule StoneChallenge.Accounts do
         end
 
       user ->
-        {:error, "User/password are incorrects"}
+        {:error, "Incorrects email/password"}
 
       true ->
         Pbkdf2.no_user_verify()
