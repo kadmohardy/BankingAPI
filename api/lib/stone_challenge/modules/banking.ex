@@ -61,7 +61,8 @@ defmodule StoneChallenge.Banking do
           account_from: account.id,
           account_to: account.id,
           type: "bank_draft",
-          amount: amount
+          amount: amount,
+          date: DateTime.utc_now()
         })
       )
       |> Repo.transaction()
@@ -128,7 +129,8 @@ defmodule StoneChallenge.Banking do
           account_from: account_from.id,
           account_to: account_to.id,
           type: "bank_draft",
-          amount: amount
+          amount: amount,
+          date: DateTime.utc_now()
         })
       )
       |> Repo.transaction()

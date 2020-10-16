@@ -21,7 +21,8 @@ defmodule StoneChallengeWeb.BankTransferView do
       account_from: transaction.account_from,
       account_to: transaction.account_to,
       amount: transaction.amount,
-      type: transaction.type
+      type: transaction.type,
+      date: transaction.date
     }
   end
 end

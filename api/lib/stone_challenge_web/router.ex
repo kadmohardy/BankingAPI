@@ -40,7 +40,6 @@ defmodule StoneChallengeWeb.Router do
     post "/transactions/draft", BankDraftController, :create
     post "/transactions/transfer", BankTransferController, :create
     delete "/sessions", SessionController, :delete
-
     resources "/reports", ReportsController, only: [:index]
   end
 

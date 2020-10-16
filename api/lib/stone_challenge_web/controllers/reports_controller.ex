@@ -1,9 +1,7 @@
 defmodule StoneChallengeWeb.ReportsController do
   use StoneChallengeWeb, :controller
+
   action_fallback StoneChallengeWeb.FallbackController
-
-  require Logger
-
   alias StoneChallenge.BackOffice
 
   def index(conn, params) do

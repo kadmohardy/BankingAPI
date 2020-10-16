@@ -10,36 +10,46 @@ defmodule StoneChallenge.BackOffice do
   alias StoneChallenge.Banking.Transaction
 
   def transactions_report(conn, params) do
-    type = Map.get(params, "type")
+    role = conn.assigns.signed_user.role
+    day = Map.get(params, "day")
+    month = Map.get(params, "month")
+    year = Map.get(params, "year")
+    b = Regex.match?(~r{\A\d*\z}, day)
+    Logger.info("TESTANDO #{inspect(b)}")
 
-    is_customer = conn.assigns.signed_user.customer
+    case is_valid_numbers_params(day, month, year) do
+      {:ok, _} ->
+        if role == "admin" do
+          {:ok, report_type} = get_report_type(day, month, year)
 
-    cond do
-      is_customer == true ->
-        {:error, :user_not_authorized}
+          Logger.info("REPORT TYPE #{inspect(report_type)}")
 
-      type == "diary" ->
-        year = Map.get(params, "year")
-        month = Map.get(params, "month")
-        day = Map.get(params, "day")
-        {:ok, diary_transactions_report(day, month, year)}
+          cond do
+            report_type == "diary" ->
+              generate_diary_report(day, month, year)
 
-      type == "monthly" ->
-        month = Map.get(params, "month")
-        year = Map.get(params, "year")
-        {:ok, monthly_transactions_report(month, year)}
+            report_type == "monthly" ->
+              generate_monthly_report(month, year)
 
-      type == "yearly" ->
-        year = Map.get(params, "year")
-        {:ok, yearly_transactions_report(year)}
+            report_type == "yearly" ->
+              generate_yearly_report(year)
 
-      type == "total" ->
-        {:ok, total_transactions_report()}
+            true ->
+              total_transactions_report()
+          end
+        else
+          {:error, "You not have permission"}
+        end
+
+      {:error, message} ->
+        {:error, message}
     end
   end
 
   defp diary_transactions_report(day, month, year) do
+    Logger.info("RESULT DATA }")
     period = StringsHelper.format_day_month_and_year(day, month, year)
+
     row_counts_by_day(period) |> Repo.all() |> Map.new()
   end
 
@@ -83,5 +93,105 @@ defmodule StoneChallenge.BackOffice do
       group_by: to_char(record.inserted_at, "YYYY"),
       where: to_char(record.inserted_at, "YYYY") == ^period,
       select: {"total", sum(record.amount)}
+  end
+
+  defp generate_diary_report(day, month, year) do
+    n_day = String.to_integer(day)
+    n_month = String.to_integer(month)
+    n_year = String.to_integer(year)
+
+    case validate_diary_report_params(n_day, n_month, n_year) do
+      {:ok, _} -> {:ok, diary_transactions_report(day, month, year)}
+      {:error, message} -> {:error, message}
+    end
+  end
+
+  defp generate_monthly_report(month, year) do
+    Logger.info("TESTANDO A A CRIACAO DO REPORT 2 MONTHLY")
+    n_month = String.to_integer(month)
+    n_year = String.to_integer(year)
+
+    case validate_monthly_report_params(n_month, n_year) do
+      {:ok, _} -> {:ok, monthly_transactions_report(month, year)}
+      {:error, message} -> {:error, message}
+    end
+  end
+
+  defp generate_yearly_report(year) do
+    Logger.info("TESTANDO A A CRIACAO DO REPORT 3 YEARLY")
+    n_year = String.to_integer(year)
+
+    case validate_yearly_report_params(n_year) do
+      {:ok, _} -> {:ok, yearly_transactions_report(year)}
+      {:error, message} -> {:error, message}
+    end
+  end
+
+  defp validate_diary_report_params(day, month, year) do
+    Logger.info("TESTANDO DAY 3 YEARLY #{inspect(day)}")
+
+    cond do
+      day <= 0 || day > 31 ->
+        {:error, "Provide a valid day (a number between 1 and 31)"}
+
+      month < 1 || month > 12 ->
+        {:error, "Provide a valid month (a number between 1 and 12)"}
+
+      year <= 0 ->
+        {:error, "Provide a valid year"}
+
+      true ->
+        {:ok, :success}
+    end
+  end
+
+  defp validate_monthly_report_params(month, year) do
+    cond do
+      month <= 1 || month > 12 ->
+        {:error, "Provide a valid month (a number between 1 and 12)"}
+
+      year <= 0 ->
+        {:error, "Provide a valid year"}
+
+      true ->
+        {:ok, :success}
+    end
+  end
+
+  defp validate_yearly_report_params(year) do
+    if year <= 0 do
+      {:error, "Provide a valid year"}
+    else
+      {:ok, :success}
+    end
+  end
+
+  defp get_report_type(day, month, year) do
+    cond do
+      day != nil && month != nil && year != nil ->
+        {:ok, "diary"}
+
+      month != nil && year != nil ->
+        {:ok, "monthly"}
+
+      year != nil ->
+        {:ok, "yearly"}
+
+      true ->
+        {:ok, "total"}
+    end
+  end
+
+  defp is_valid_numbers_params(day, month, year) do
+    cond do
+      !is_only_numbers(day) -> {:error, "Invalid day param"}
+      !is_only_numbers(month) -> {:error, "Invalid month param"}
+      !is_only_numbers(year) -> {:error, "Invalid year param"}
+      true -> {:ok, :success}
+    end
+  end
+
+  defp is_only_numbers(value) do
+    Regex.match?(~r{\A\d*\z}, value)
   end
 end
