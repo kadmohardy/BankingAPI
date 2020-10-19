@@ -9,6 +9,8 @@ config :stone_challenge, StoneChallenge.Repo,
   username: "postgres",
   password: "postgres",
   database: "stone_challenge_test#{System.get_env("MIX_TEST_PARTITION")}",
+  database: "stone_challenge_test",
+  #  hostname: "localhost",
   hostname: "104.248.48.177",
   pool: Ecto.Adapters.SQL.Sandbox
 

@@ -10,7 +10,7 @@ defmodule StoneChallenge.Accounts do
   alias StoneChallenge.Tokens
   require Logger
 
-  defp insert_user(attrs) do
+  defp generate_user(attrs) do
     %User{}
     |> User.changeset(attrs)
   end
@@ -18,23 +18,6 @@ defmodule StoneChallenge.Accounts do
   def update_account(%Account{} = account, attrs) do
     account
     |> Account.changeset(attrs)
-  end
-
-  def create_user(attrs \\ %{}) do
-    transaction =
-      Ecto.Multi.new()
-      |> Ecto.Multi.insert(:user, insert_user(attrs))
-      |> Ecto.Multi.insert(:account, fn %{user: user} ->
-        user
-        |> Ecto.build_assoc(:accounts)
-        |> Account.changeset()
-      end)
-      |> Repo.transaction()
-
-    case transaction do
-      {:ok, operations} -> {:ok, operations.user, operations.account}
-      {:error, :user, changeset, _} -> {:error, changeset}
-    end
   end
 
   def get_account(id), do: Repo.get(Account, id)
@@ -49,7 +32,7 @@ defmodule StoneChallenge.Accounts do
     Repo.get(User, id) |> Repo.preload(:accounts)
   end
 
-  def get_users(id) do
+  def get_users() do
     Repo.all(User) |> Repo.preload(:accounts)
   end
 
@@ -57,56 +40,43 @@ defmodule StoneChallenge.Accounts do
     Repo.get_by(User, params) |> Repo.preload(:accounts)
   end
 
-  def list_users do
+  def list_customer_users do
     query = from u in User, where: u.role == "customer", preload: [:accounts]
 
     Repo.all(query)
   end
 
-  # def change_user(%User{} = user) do
-  #   User.changeset(user, %{})
+  # def change_registration(%User{} = user, params) do
+  #   User.registration_changeset(user, params)
   # end
 
-  # def update_account_balance(%Account{} = account, amount) do
-  #   Account.update_changeset(%{balance: Decimal.sub(user_account.balance, amount)})
-  #     |> Repo.update!()
+  # def register_user(attrs \\ %{}) do
+  #   %User{}
+  #   |> User.registration_changeset(attrs)
+  #   |> Repo.insert()
   # end
 
-  def change_registration(%User{} = user, params) do
-    User.registration_changeset(user, params)
-  end
+  # def get_user_account(id) do
+  #   query =
+  #     from u in User,
+  #       where: u.id == ^id,
+  #       preload: [:account]
 
-  def register_user(attrs \\ %{}) do
-    %User{}
-    |> User.registration_changeset(attrs)
-    |> Repo.insert()
-  end
+  #   Repo.one(query)
+  # end
 
-  def get_user_account(id) do
-    query =
-      from u in User,
-        where: u.id == ^id,
-        preload: [:account]
+  # def get_user_by_account(account_number) do
+  #   query =
+  #     from u in User,
+  #       join: a in assoc(u, :account),
+  #       where: a.account_number == ^account_number,
+  #       preload: [account: a]
 
-    Repo.one(query)
-  end
+  #   Repo.one(query)
+  # end
 
-  def get_user_by_account(account_number) do
-    query =
-      from u in User,
-        join: a in assoc(u, :account),
-        where: a.account_number == ^account_number,
-        preload: [account: a]
-
-    Repo.one(query)
-  end
-
-  def sign_in(attrs) do
-    email = Map.get(attrs, "email")
-    password = Map.get(attrs, "password")
-
+  def sign_in(email, password) do
     user = get_user_by(%{email: email})
-    Logger.info("TESTANDO LOGO #{inspect(user)}")
 
     cond do
       user && Pbkdf2.verify_pass(password, user.password_hash) ->
@@ -123,6 +93,23 @@ defmodule StoneChallenge.Accounts do
       true ->
         Pbkdf2.no_user_verify()
         {:error, "User not have account"}
+    end
+  end
+
+  def sign_up(attrs \\ %{}) do
+    transaction =
+      Ecto.Multi.new()
+      |> Ecto.Multi.insert(:user, generate_user(attrs))
+      |> Ecto.Multi.insert(:account, fn %{user: user} ->
+        user
+        |> Ecto.build_assoc(:accounts)
+        |> Account.changeset()
+      end)
+      |> Repo.transaction()
+
+    case transaction do
+      {:ok, operations} -> {:ok, operations.user, operations.account}
+      {:error, :user, changeset, _} -> {:error, changeset}
     end
   end
 

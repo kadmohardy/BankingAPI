@@ -36,8 +36,7 @@ defmodule StoneChallenge.Accounts.User do
     |> update_change(:email, &String.downcase(&1))
     |> validate_length(:password,
       min: 6,
-      max: 50,
-      message: "Password should have between 6 and 50 characters"
+      message: "Password should be at least 6 character(s)"
     )
     |> validate_confirmation(:password, message: "Passwords are different")
     |> unique_constraint(:email, message: "This mail address already used by an user")

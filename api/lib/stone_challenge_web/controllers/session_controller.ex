@@ -4,8 +4,8 @@ defmodule StoneChallengeWeb.SessionController do
 
   action_fallback StoneChallengeWeb.FallbackController
 
-  def create(conn, params) do
-    with {:ok, auth_token} <- StoneChallenge.Accounts.sign_in(params) do
+  def create(conn, %{"email" => email, "password" => password}) do
+    with {:ok, auth_token} <- StoneChallenge.Accounts.sign_in(email, password) do
       conn
       |> put_status(:ok)
       |> render(StoneChallengeWeb.SessionView, "show.json", auth_token: auth_token)

@@ -12,7 +12,6 @@ defmodule StoneChallengeWeb.Router do
 
   scope "/", StoneChallengeWeb do
     pipe_through(:browser)
-
     get("/", PageController, :index)
   end
 

@@ -25,6 +25,6 @@ defmodule StoneChallengeWeb.Plugs.Authenticate do
   end
 
   defp unauthorized(conn) do
-    conn |> send_resp(401, "Unauthorized") |> halt()
+    conn |> put_resp_content_type("application/json") |> send_resp(401, "Unauthorized") |> halt()
   end
 end

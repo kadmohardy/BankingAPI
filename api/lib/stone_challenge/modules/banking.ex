@@ -11,13 +11,7 @@ defmodule StoneChallenge.Banking do
   alias StoneChallenge.Banking.Transaction
   alias StoneChallenge.Accounts.{Account, User}
   alias StoneChallenge.Accounts
-
   alias StoneChallenge.Helper.BankingHelper
-
-  defp insert_transaction(attrs) do
-    %Transaction{}
-    |> Transaction.changeset(attrs)
-  end
 
   def get_transaction(id) do
     Repo.get(Transaction, id)
@@ -57,13 +51,7 @@ defmodule StoneChallenge.Banking do
       )
       |> Ecto.Multi.insert(
         :transaction,
-        insert_transaction(%{
-          account_from: account.id,
-          account_to: account.id,
-          type: "bank_draft",
-          amount: amount,
-          date: DateTime.utc_now()
-        })
+        generate_transaction(amount, account.id, nil, "bank_draft")
       )
       |> Repo.transaction()
 
@@ -125,13 +113,7 @@ defmodule StoneChallenge.Banking do
       )
       |> Ecto.Multi.insert(
         :transaction,
-        insert_transaction(%{
-          account_from: account_from.id,
-          account_to: account_to.id,
-          type: "bank_draft",
-          amount: amount,
-          date: DateTime.utc_now()
-        })
+        generate_transaction(amount, account_from.id, account_to.id, "transfer")
       )
       |> Repo.transaction()
 
@@ -173,5 +155,15 @@ defmodule StoneChallenge.Banking do
     else
       {:error, "The account that you trying to transfer not exists"}
     end
+  end
+
+  defp generate_transaction(amount, account_from_id, account_to_id, type) do
+    %Transaction{
+      amount: amount,
+      account_from: account_from_id,
+      account_to: account_to_id,
+      type: type,
+      date: Date.utc_today()
+    }
   end
 end

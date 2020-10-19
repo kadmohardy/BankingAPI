@@ -11,11 +11,14 @@ defmodule StoneChallenge.TestHelpers do
     {:ok, user} =
       attrs
       |> Enum.into(%{
-        name: "UserTest",
-        email: "usertest@gmail.com",
-        password: attrs[:password] || "123456"
+        first_name: "Customer",
+        last_name: "Test",
+        email: "customertest@gmail.com",
+        password: attrs[:password] || "123456",
+        password_confirmation: attrs[:password_confirmation] || "123456",
+        role: "customer"
       })
-      |> Accounts.register_user_and_account()
+      |> Accounts.sign_up()
 
     user
   end
@@ -24,14 +27,13 @@ defmodule StoneChallenge.TestHelpers do
     {:ok, transaction} =
       attrs
       |> Enum.into(%{
-        amount: 1000,
-        type: 1,
-        user_id: 1,
-        target_account_number: "197008"
+        type: "bank_draft",
+        amount: 50.00,
+        account_to: "44b48b28-a736-490d-a73c-3c156e20cfb4",
+        account_from: "44b48b28-a736-490d-a73c-3c156e20cfb4",
+        type: "transfer"
       })
-      |> Banking.register_transaction()
-
-    transaction
+      |> Banking.create_transfer_transaction()
   end
 
   # def auth_token_fixture(attrs \\ %{}) do

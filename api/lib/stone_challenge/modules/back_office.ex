@@ -9,36 +9,29 @@ defmodule StoneChallenge.BackOffice do
   alias StoneChallenge.Helper.StringsHelper
   alias StoneChallenge.Banking.Transaction
 
-  def transactions_report(conn, params) do
-    role = conn.assigns.signed_user.role
+  def transactions_report(params) do
     day = Map.get(params, "day")
     month = Map.get(params, "month")
     year = Map.get(params, "year")
-    b = Regex.match?(~r{\A\d*\z}, day)
-    Logger.info("TESTANDO #{inspect(b)}")
 
     case is_valid_numbers_params(day, month, year) do
       {:ok, _} ->
-        if role == "admin" do
-          {:ok, report_type} = get_report_type(day, month, year)
+        {:ok, report_type} = get_report_type(day, month, year)
 
-          Logger.info("REPORT TYPE #{inspect(report_type)}")
+        Logger.info("REPORT TYPE #{inspect(report_type)}")
 
-          cond do
-            report_type == "diary" ->
-              generate_diary_report(day, month, year)
+        cond do
+          report_type == "diary" ->
+            generate_diary_report(day, month, year)
 
-            report_type == "monthly" ->
-              generate_monthly_report(month, year)
+          report_type == "monthly" ->
+            generate_monthly_report(month, year)
 
-            report_type == "yearly" ->
-              generate_yearly_report(year)
+          report_type == "yearly" ->
+            generate_yearly_report(year)
 
-            true ->
-              total_transactions_report()
-          end
-        else
-          {:error, "You not have permission"}
+          true ->
+            total_transactions_report()
         end
 
       {:error, message} ->

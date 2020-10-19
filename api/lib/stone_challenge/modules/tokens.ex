@@ -6,8 +6,6 @@ defmodule StoneChallenge.Tokens do
   alias StoneChallenge.AuthToken
   alias StoneChallenge.Accounts.User
 
-  alias StoneChallenge.Helper.BankingHelper
-
   def get_token(id) do
     Repo.get(AuthToken, id)
   end
@@ -17,9 +15,8 @@ defmodule StoneChallenge.Tokens do
   end
 
   def get_token_by(params) do
-    token =
-      Repo.get_by(AuthToken, params)
-      |> Repo.preload([{:user, :accounts}])
+    Repo.get_by(AuthToken, params)
+    |> Repo.preload([{:user, :accounts}])
   end
 
   def list_tokens do

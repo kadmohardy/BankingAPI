@@ -6,14 +6,16 @@ defmodule StoneChallengeWeb.UserController do
   action_fallback StoneChallengeWeb.FallbackController
 
   def index(conn, _params) do
-    users = Accounts.get_users()
-
-    conn
-    |> render(StoneChallengeWeb.UserView, "index.json", users: users)
+    with {:ok, users} <- Accounts.get_users() do
+      conn
+      |> put_status(:created)
+      # |> put_resp_header("location", Routes.user_path(conn, :show, id: user.id))
+      |> render(StoneChallengeWeb.UserView, "index.json", users: users)
+    end
   end
 
   def create(conn, params) do
-    with {:ok, user, account} <- Accounts.create_user(params) do
+    with {:ok, user, account} <- Accounts.sign_up(params) do
       conn
       |> put_status(:created)
       # |> put_resp_header("location", Routes.user_path(conn, :show, id: user.id))
