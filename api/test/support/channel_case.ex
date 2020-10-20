@@ -22,17 +22,17 @@ defmodule StoneChallengeWeb.ChannelCase do
       # Import conveniences for testing with channels
       import Phoenix.ChannelTest
       import StoneChallengeWeb.ChannelCase
-
+      alias Ecto.Adapters.SQL.Sandbox
       # The default endpoint for testing
       @endpoint StoneChallengeWeb.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(StoneChallenge.Repo)
+    :ok = Sandbox.checkout(StoneChallenge.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(StoneChallenge.Repo, {:shared, self()})
+      Sandbox.mode(StoneChallenge.Repo, {:shared, self()})
     end
 
     :ok

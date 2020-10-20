@@ -18,6 +18,7 @@ defmodule StoneChallenge.DataCase do
 
   using do
     quote do
+      alias Ecto.Adapters.SQL.Sandbox
       alias StoneChallenge.Repo
 
       import Ecto
@@ -29,10 +30,10 @@ defmodule StoneChallenge.DataCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(StoneChallenge.Repo)
+    :ok = Sandbox.checkout(StoneChallenge.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(StoneChallenge.Repo, {:shared, self()})
+      Sandbox.mode(StoneChallenge.Repo, {:shared, self()})
     end
 
     :ok

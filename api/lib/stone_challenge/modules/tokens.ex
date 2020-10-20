@@ -1,10 +1,14 @@
 defmodule StoneChallenge.Tokens do
+  @moduledoc """
+  This module describe account context functions
+  """
+
   import Ecto.Query, warn: false
   require Logger
 
-  alias StoneChallenge.Repo
-  alias StoneChallenge.AuthToken
   alias StoneChallenge.Accounts.User
+  alias StoneChallenge.AuthToken
+  alias StoneChallenge.Repo
 
   def get_token(id) do
     Repo.get(AuthToken, id)

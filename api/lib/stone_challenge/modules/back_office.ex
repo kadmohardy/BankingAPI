@@ -5,9 +5,9 @@ defmodule StoneChallenge.BackOffice do
   import Ecto.Query, warn: false
 
   require Logger
-  alias StoneChallenge.Repo
-  alias StoneChallenge.Helper.StringsHelper
   alias StoneChallenge.Banking.Transaction
+  alias StoneChallenge.Helper.StringsHelper
+  alias StoneChallenge.Repo
 
   def transactions_report(params) do
     day = Map.get(params, "day")
@@ -52,7 +52,7 @@ defmodule StoneChallenge.BackOffice do
     row_counts_by_year(year) |> Repo.all() |> Map.new()
   end
 
-  defp total_transactions_report() do
+  defp total_transactions_report do
     Repo.all(from t in Transaction, select: sum(t.amount))
   end
 

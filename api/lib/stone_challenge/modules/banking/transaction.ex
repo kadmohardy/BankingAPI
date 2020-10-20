@@ -1,4 +1,7 @@
 defmodule StoneChallenge.Banking.Transaction do
+  @moduledoc """
+  This module describe Transaction model
+  """
   use Ecto.Schema
   import Ecto.Changeset
 

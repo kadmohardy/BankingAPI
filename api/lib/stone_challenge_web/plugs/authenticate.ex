@@ -1,13 +1,17 @@
 defmodule StoneChallengeWeb.Plugs.Authenticate do
+  @moduledoc """
+  This module describe authenticate plug
+  """
   import Plug.Conn
-  require Logger
 
+  alias StoneChallenge.Services.Authenticator
+  alias StoneChallenge.Tokens
   def init(opts), do: opts
 
   def call(conn, _default) do
-    case StoneChallenge.Services.Authenticator.get_auth_token(conn) do
+    case Authenticator.get_auth_token(conn) do
       {:ok, token} ->
-        case StoneChallenge.Tokens.get_token_by(%{token: token, revoked: false}) do
+        case Tokens.get_token_by(%{token: token, revoked: false}) do
           nil -> unauthorized(conn)
           auth_token -> authorized(conn, auth_token.user)
         end

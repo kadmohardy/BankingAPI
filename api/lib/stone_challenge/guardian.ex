@@ -1,4 +1,7 @@
 defmodule StoneChallenge.Guardian do
+  @moduledoc """
+  This module describe auxiliar functions used to handle guardian jwt tokens
+  """
   use Guardian, otp_app: :stone_challenge
 
   def subject_for_token(resource, _claims) do

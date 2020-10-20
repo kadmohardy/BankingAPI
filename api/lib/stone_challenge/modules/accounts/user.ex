@@ -1,4 +1,7 @@
 defmodule StoneChallenge.Accounts.User do
+  @moduledoc """
+  This module describe User model
+  """
   use Ecto.Schema
   import Ecto.Changeset
 

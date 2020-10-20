@@ -1,4 +1,7 @@
 defmodule StoneChallengeWeb.Telemetry do
+  @moduledoc """
+  This module describe telemetry module
+  """
   use Supervisor
   import Telemetry.Metrics
 

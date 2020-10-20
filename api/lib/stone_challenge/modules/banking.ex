@@ -8,9 +8,10 @@ defmodule StoneChallenge.Banking do
   require Logger
 
   alias StoneChallenge.Repo
-  alias StoneChallenge.Banking.Transaction
-  alias StoneChallenge.Accounts.Account
+
   alias StoneChallenge.Accounts
+  alias StoneChallenge.Accounts.Account
+  alias StoneChallenge.Banking.Transaction
   alias StoneChallenge.Helper.BankingHelper
 
   def get_transaction(id) do

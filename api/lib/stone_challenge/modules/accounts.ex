@@ -3,8 +3,9 @@ defmodule StoneChallenge.Accounts do
   This module handle Accounts context
   """
   import Ecto.Query
-  alias StoneChallenge.Repo
+
   alias StoneChallenge.Accounts.{Account, User}
+  alias StoneChallenge.Repo
   alias StoneChallenge.Services.Authenticator
   alias StoneChallenge.Tokens
   require Logger
@@ -31,7 +32,7 @@ defmodule StoneChallenge.Accounts do
     Repo.get(User, id) |> Repo.preload(:accounts)
   end
 
-  def get_users() do
+  def get_users do
     Repo.all(User) |> Repo.preload(:accounts)
   end
 

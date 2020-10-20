@@ -1,4 +1,7 @@
 defmodule StoneChallengeWeb.PageControllerTest do
+  @moduledoc """
+  This module describe page controller test
+  """
   use StoneChallengeWeb.ConnCase
 
   test "GET /", %{conn: conn} do
