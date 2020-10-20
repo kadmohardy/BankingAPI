@@ -19,5 +19,7 @@ defmodule StoneChallenge.Banking.Transaction do
     transaction
     |> cast(params, [:account_from, :account_to, :amount, :type, :date])
     |> validate_required([:account_from, :account_to, :amount, :type])
+    |> validate_number(:amount, greater_than: 0)
+    |> validate_inclusion(:type, ["bank_draft", "transfer"], message: "Invalid transaction type")
   end
 end

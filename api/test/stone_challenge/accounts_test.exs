@@ -72,22 +72,22 @@ defmodule StoneChallenge.AccountsTest do
     @pass "123456"
     @bad_pass "12345"
     @unknow_user "customer@gmail.com"
+
     setup do
       {:ok, user: user_fixture(password: @pass)}
     end
 
-    # test "get user with correct password", %{user: user} do
-    #   assert {:ok, auth_token} = Accounts.sign_in(user.email, @pass)
+    test "get user with correct password", %{user: user} do
+      assert {:ok, auth_token} = Accounts.sign_in(user.email, @pass)
+      assert String.length(auth_token.token) > 0
+    end
 
-    #   assert String.length(auth_token.token) > 0
-    # end
+    test "get not autorized user due invalid password", %{user: user} do
+      assert {:error, "Incorrects email/password"} = Accounts.sign_in(user.email, @bad_pass)
+    end
 
-    # test "get not autorized user due invalid password", %{user: user} do
-    #   assert {:error, :unauthorized} = Accounts.sign_in(user.account.account_number, "badpass")
-    # end
-
-    # test "user account not exist" do
-    #   assert {:error, :not_found} = Accounts.sign_in(@unknow_user, @pass)
-    # end
+    test "user account not exist" do
+      assert {:error, "User not have account"} = Accounts.sign_in(@unknow_user, @pass)
+    end
   end
 end

@@ -8,7 +8,7 @@ defmodule StoneChallenge.TestHelpers do
   }
 
   def user_fixture(attrs \\ %{}) do
-    {:ok, user} =
+    {:ok, user, _account} =
       attrs
       |> Enum.into(%{
         first_name: "Customer",
@@ -23,29 +23,35 @@ defmodule StoneChallenge.TestHelpers do
     user
   end
 
-  def transaction_fixture(attrs \\ %{}) do
-    {:ok, transaction} =
+  def account_one_fixture(attrs \\ %{}) do
+    {:ok, _user, account} =
       attrs
       |> Enum.into(%{
-        type: "bank_draft",
-        amount: 50.00,
-        account_to: "44b48b28-a736-490d-a73c-3c156e20cfb4",
-        account_from: "44b48b28-a736-490d-a73c-3c156e20cfb4",
-        type: "transfer"
+        first_name: "Customer1",
+        last_name: "Test1",
+        email: "customertest1@gmail.com",
+        password: attrs[:password] || "123456",
+        password_confirmation: attrs[:password_confirmation] || "123456",
+        role: "customer"
       })
-      |> Banking.create_transfer_transaction()
+      |> Accounts.sign_up()
+
+    account
   end
 
-  # def auth_token_fixture(attrs \\ %{}) do
-  #   {:ok, auth_token} =
-  #     attrs
-  #     |> Enum.into(%{
-  #       token: "Some Token",
-  #       revoked: false,
-  #       user_id: 29
-  #     })
-  #     |> AuthToken.register_user()
+  def account_two_fixture(attrs \\ %{}) do
+    {:ok, _user, account} =
+      attrs
+      |> Enum.into(%{
+        first_name: "Customer2",
+        last_name: "Test2",
+        email: "customertest2@gmail.com",
+        password: attrs[:password] || "123456",
+        password_confirmation: attrs[:password_confirmation] || "123456",
+        role: "customer"
+      })
+      |> Accounts.sign_up()
 
-  #   auth_token
-  # end
+    account
+  end
 end

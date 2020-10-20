@@ -15,7 +15,7 @@ defmodule StoneChallengeWeb.SessionController do
   def delete(conn, _) do
     case StoneChallenge.Accounts.sign_out(conn) do
       {:error, reason} -> conn |> send_resp(400, reason)
-      {:ok, _} -> conn |> send_resp(204, "Sign out realizado com sucesso.")
+      {:ok, _} -> conn |> send_resp(204, "Sign out realized with success.")
     end
   end
 end

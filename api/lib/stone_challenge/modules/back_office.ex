@@ -18,8 +18,6 @@ defmodule StoneChallenge.BackOffice do
       {:ok, _} ->
         {:ok, report_type} = get_report_type(day, month, year)
 
-        Logger.info("REPORT TYPE #{inspect(report_type)}")
-
         cond do
           report_type == "diary" ->
             generate_diary_report(day, month, year)
@@ -40,7 +38,6 @@ defmodule StoneChallenge.BackOffice do
   end
 
   defp diary_transactions_report(day, month, year) do
-    Logger.info("RESULT DATA }")
     period = StringsHelper.format_day_month_and_year(day, month, year)
 
     row_counts_by_day(period) |> Repo.all() |> Map.new()
@@ -100,7 +97,6 @@ defmodule StoneChallenge.BackOffice do
   end
 
   defp generate_monthly_report(month, year) do
-    Logger.info("TESTANDO A A CRIACAO DO REPORT 2 MONTHLY")
     n_month = String.to_integer(month)
     n_year = String.to_integer(year)
 
@@ -111,7 +107,6 @@ defmodule StoneChallenge.BackOffice do
   end
 
   defp generate_yearly_report(year) do
-    Logger.info("TESTANDO A A CRIACAO DO REPORT 3 YEARLY")
     n_year = String.to_integer(year)
 
     case validate_yearly_report_params(n_year) do
@@ -121,8 +116,6 @@ defmodule StoneChallenge.BackOffice do
   end
 
   defp validate_diary_report_params(day, month, year) do
-    Logger.info("TESTANDO DAY 3 YEARLY #{inspect(day)}")
-
     cond do
       day <= 0 || day > 31 ->
         {:error, "Provide a valid day (a number between 1 and 31)"}

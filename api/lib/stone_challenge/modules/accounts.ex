@@ -5,7 +5,6 @@ defmodule StoneChallenge.Accounts do
   import Ecto.Query
   alias StoneChallenge.Repo
   alias StoneChallenge.Accounts.{Account, User}
-  alias StoneChallenge.Banking
   alias StoneChallenge.Services.Authenticator
   alias StoneChallenge.Tokens
   require Logger

@@ -8,9 +8,15 @@ defmodule StoneChallengeWeb.BankTransferController do
 
   def create(
         conn,
-        params
+        %{
+          "account_to" => account_to_id,
+          "amount" => amount
+        }
       ) do
-    with {:ok, account, transaction} <- Banking.bank_transfer_transaction(conn, params) do
+    account_from = conn.assigns.signed_user.accounts
+
+    with {:ok, account, transaction} <-
+           Banking.bank_transfer_transaction(account_from, account_to_id, amount) do
       Logger.info("TRANSAÇÃO REALIZADA COM SUCESSO #{inspect(transaction)}")
 
       conn

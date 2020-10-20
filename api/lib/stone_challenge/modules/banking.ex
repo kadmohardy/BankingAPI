@@ -9,7 +9,7 @@ defmodule StoneChallenge.Banking do
 
   alias StoneChallenge.Repo
   alias StoneChallenge.Banking.Transaction
-  alias StoneChallenge.Accounts.{Account, User}
+  alias StoneChallenge.Accounts.Account
   alias StoneChallenge.Accounts
   alias StoneChallenge.Helper.BankingHelper
 
@@ -29,15 +29,9 @@ defmodule StoneChallenge.Banking do
     Repo.all(Transaction)
   end
 
-  def realize do
-    Repo.all(Transaction)
-  end
-
-  def update_account(%Account{} = account, params) do
-    account
-    |> Account.changeset(params)
-    |> Repo.update!()
-  end
+  # def realize do
+  #   Repo.all(Transaction)
+  # end
 
   def create_draft_transaction(%Account{} = account, amount) do
     db_transaction =
@@ -62,25 +56,23 @@ defmodule StoneChallenge.Banking do
   end
 
   def bank_draft_transaction(
-        conn,
-        %{
-          "amount" => amount
-        }
+        account_from,
+        amount
       ) do
-    account = conn.assigns.signed_user.accounts
-    Logger.info("TESTANDO ACCOUNT #{inspect(account)}")
+    Logger.debug("============= = #{inspect(amount)}")
+    value = Decimal.from_float(amount)
 
-    if account != nil do
+    if account_from != nil do
       cond do
         # Verify if user has money
-        amount <= 0 ->
-          {:error, "The value should be more than zero"}
+        Decimal.negative?(value) ->
+          {:error, "The amount should be more than zero"}
 
-        BankingHelper.is_negative_balance(account.balance, amount) ->
+        BankingHelper.is_negative_balance(account_from.balance, value) ->
           {:error, "You not have money"}
 
         true ->
-          case create_draft_transaction(account, amount) do
+          case create_draft_transaction(account_from, value) do
             {:ok, account, transaction} -> {:ok, account, transaction}
             {:error, changeset} -> {:error, changeset}
           end
@@ -113,7 +105,7 @@ defmodule StoneChallenge.Banking do
       )
       |> Ecto.Multi.insert(
         :transaction,
-        generate_transaction(amount, account_from.id, account_to.id, "transfer")
+        generate_transaction(amount, account_from.id, account_to.id, "bank_transfer")
       )
       |> Repo.transaction()
 
@@ -124,15 +116,12 @@ defmodule StoneChallenge.Banking do
   end
 
   def bank_transfer_transaction(
-        conn,
-        %{
-          "amount" => amount,
-          "account_to" => account_to
-        }
+        account_from,
+        account_to_id,
+        amount
       ) do
-    account_from = conn.assigns.signed_user.accounts
-
-    account_to = Accounts.get_account!(account_to)
+    account_to = Accounts.get_account!(account_to_id)
+    value = Decimal.from_float(amount)
 
     if account_to != nil do
       cond do
@@ -140,14 +129,14 @@ defmodule StoneChallenge.Banking do
         account_from.id == account_to.id ->
           {:error, "You can't transfer money to your account."}
 
-        amount <= 0 ->
-          {:error, "The value should be more than zero"}
+        Decimal.negative?(value) ->
+          {:error, "The amount should be more than zero"}
 
-        BankingHelper.is_negative_balance(account_from.balance, amount) ->
+        BankingHelper.is_negative_balance(account_from.balance, value) ->
           {:error, "You not have money"}
 
         true ->
-          case create_transfer_transaction(account_from, account_to, amount) do
+          case create_transfer_transaction(account_from, account_to, value) do
             {:ok, account_from, transaction} -> {:ok, account_from, transaction}
             {:error, changeset} -> {:error, changeset}
           end
