@@ -41,6 +41,7 @@ defmodule StoneChallenge.Accounts.User do
       min: 6,
       message: "Password should be at least 6 character(s)"
     )
+    |> validate_inclusion(:role, ["admin", "customer"])
     |> validate_confirmation(:password, message: "Passwords are different")
     |> unique_constraint(:email, message: "This mail address already used by an user")
     |> put_pass_hash()
