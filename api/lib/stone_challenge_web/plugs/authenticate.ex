@@ -19,7 +19,7 @@ defmodule StoneChallengeWeb.Plugs.Authenticate do
         end
 
       _ ->
-        {:error, "User not authorized"}
+        unauthorized(conn)
     end
   end
 
@@ -31,7 +31,9 @@ defmodule StoneChallengeWeb.Plugs.Authenticate do
   end
 
   defp unauthorized(conn) do
-    Logger.debug("NAO AUTORIZADO #$@#$@#$@#$@#$@#$@#$@#$@#$")
-    conn |> put_resp_content_type("application/json") |> send_resp(401, "Unauthorized") |> halt()
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(401, "error: Unauthorized")
+    |> halt()
   end
 end

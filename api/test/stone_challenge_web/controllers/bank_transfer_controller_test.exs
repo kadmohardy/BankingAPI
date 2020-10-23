@@ -92,6 +92,5 @@ defmodule StoneChallengeWeb.BankTransferControllerTest do
 
       assert body["message"] == "You can't transfer money to your account."
     end
-
   end
 end

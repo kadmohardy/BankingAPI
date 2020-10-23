@@ -37,7 +37,7 @@ defmodule StoneChallengeWeb.UserController do
     else
       conn
       |> put_resp_content_type("application/json")
-      |> send_resp(401, "Unauthorized")
+      |> send_resp(401, "error: Unauthorized")
       |> halt()
     end
   end

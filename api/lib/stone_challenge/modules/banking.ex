@@ -13,6 +13,7 @@ defmodule StoneChallenge.Banking do
   alias StoneChallenge.Accounts.Account
   alias StoneChallenge.Banking.Transaction
   alias StoneChallenge.Helper.BankingHelper
+  alias StoneChallenge.Helper.StringsHelper
 
   def get_transaction(id) do
     Repo.get(Transaction, id)
@@ -60,10 +61,12 @@ defmodule StoneChallenge.Banking do
         account_from,
         amount
       ) do
-    Logger.debug("============= = #{inspect(amount)}")
-    value = Decimal.from_float(amount)
 
-    if account_from != nil do
+
+    Logger.debug("============= = #{inspect(StringsHelper.parse_float(amount))}")
+    value = StringsHelper.parse_float(amount)
+
+    if account_from != nil && value != nil do
       cond do
         # Verify if user has money
         Decimal.negative?(value) ->
@@ -79,7 +82,12 @@ defmodule StoneChallenge.Banking do
           end
       end
     else
-      {:error, "Invalid account"}
+      cond do
+        account_from == nil -> {:error, "Invalid account"}
+
+        true -> {:error, "Invalid amount format"}
+      end
+
     end
   end
 

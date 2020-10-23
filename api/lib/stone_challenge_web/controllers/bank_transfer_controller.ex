@@ -17,7 +17,7 @@ defmodule StoneChallengeWeb.BankTransferController do
     account_from = conn.assigns.signed_user.accounts
 
     with {:ok, account, transaction} <-
-      Banking.bank_transfer_transaction(account_from, account_to_id, amount) do
+           Banking.bank_transfer_transaction(account_from, account_to_id, amount) do
       Logger.info("TRANSAÇÃO REALIZADA COM SUCESSO #{inspect(transaction)}")
 
       conn
@@ -37,7 +37,7 @@ defmodule StoneChallengeWeb.BankTransferController do
     else
       conn
       |> put_resp_content_type("application/json")
-      |> send_resp(401, "Unauthorized")
+      |> send_resp(401, "error: Unauthorized")
       |> halt()
     end
   end

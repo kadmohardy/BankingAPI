@@ -45,7 +45,6 @@ defmodule StoneChallengeWeb.UserControllerTest do
       role: "test"
     }
 
-
     setup %{conn: conn} do
       {:ok, conn: conn}
     end
