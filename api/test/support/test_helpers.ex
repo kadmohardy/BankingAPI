@@ -40,7 +40,7 @@ defmodule StoneChallenge.TestHelpers do
   end
 
   def account_one_fixture(attrs \\ %{}) do
-    {:ok, _user, account} =
+    {:ok, user, account} =
       attrs
       |> Enum.into(%{
         first_name: "Customer1",
@@ -52,7 +52,7 @@ defmodule StoneChallenge.TestHelpers do
       })
       |> Accounts.sign_up()
 
-    account
+    {user, account}
   end
 
   def account_two_fixture(attrs \\ %{}) do
@@ -71,13 +71,13 @@ defmodule StoneChallenge.TestHelpers do
     account
   end
 
-  def user_one_fixture(attrs \\ %{}) do
+  def user_three_fixture(attrs \\ %{}) do
     {:ok, user, _account} =
       attrs
       |> Enum.into(%{
-        first_name: "Customer1",
-        last_name: "Test1",
-        email: "customertest1@gmail.com",
+        first_name: "Customer3",
+        last_name: "Test3",
+        email: "customertest3@gmail.com",
         password: attrs[:password] || "123456",
         password_confirmation: attrs[:password_confirmation] || "123456",
         role: "customer"
@@ -87,13 +87,13 @@ defmodule StoneChallenge.TestHelpers do
     user
   end
 
-  def user_two_fixture(attrs \\ %{}) do
+  def user_four_fixture(attrs \\ %{}) do
     {:ok, user, _account} =
       attrs
       |> Enum.into(%{
-        first_name: "Customer2",
-        last_name: "Test2",
-        email: "customertest2@gmail.com",
+        first_name: "Customer4",
+        last_name: "Test4",
+        email: "customertest4@gmail.com",
         password: attrs[:password] || "123456",
         password_confirmation: attrs[:password_confirmation] || "123456",
         role: "customer"

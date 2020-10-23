@@ -17,12 +17,12 @@ defmodule StoneChallengeWeb.BankTransferController do
     account_from = conn.assigns.signed_user.accounts
 
     with {:ok, account, transaction} <-
-           Banking.bank_transfer_transaction(account_from, account_to_id, amount) do
+      Banking.bank_transfer_transaction(account_from, account_to_id, amount) do
       Logger.info("TRANSAÇÃO REALIZADA COM SUCESSO #{inspect(transaction)}")
 
       conn
       |> render(
-        StoneChallengeWeb.BankDraftView,
+        StoneChallengeWeb.BankTransferView,
         "bank_transfer.json",
         %{account: account, transaction: transaction}
       )

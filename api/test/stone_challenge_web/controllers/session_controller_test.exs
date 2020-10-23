@@ -11,7 +11,7 @@ defmodule StoneChallengeWeb.UserControllerTest do
     @create_session_invalid_attrs %{email: "invaliduser@gmail.com", password: "123456"}
 
     setup %{conn: conn} do
-      user = user_one_fixture()
+      user = user_fixture()
 
       {:ok, conn: conn, user: user}
     end
