@@ -14,8 +14,6 @@ defmodule StoneChallengeWeb.BankDraftController do
     account_from = conn.assigns.signed_user.accounts
 
     with {:ok, account, transaction} <- Banking.bank_draft_transaction(account_from, amount) do
-      Logger.info("TRANSAÇÃO REALIZADA COM SUCESSO #{inspect(account)}")
-
       conn
       |> render(
         StoneChallengeWeb.BankDraftView,

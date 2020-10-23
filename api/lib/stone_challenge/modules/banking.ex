@@ -31,10 +31,6 @@ defmodule StoneChallenge.Banking do
     Repo.all(Transaction)
   end
 
-  # def realize do
-  #   Repo.all(Transaction)
-  # end
-
   def create_draft_transaction(%Account{} = account, amount) do
     db_transaction =
       Ecto.Multi.new()
@@ -61,9 +57,6 @@ defmodule StoneChallenge.Banking do
         account_from,
         amount
       ) do
-
-
-    Logger.debug("============= = #{inspect(StringsHelper.parse_float(amount))}")
     value = StringsHelper.parse_float(amount)
 
     if account_from != nil && value != nil do
@@ -82,12 +75,11 @@ defmodule StoneChallenge.Banking do
           end
       end
     else
-      cond do
-        account_from == nil -> {:error, "Invalid account"}
-
-        true -> {:error, "Invalid amount format"}
+      if account_from == nil do
+        {:error, "Invalid account"}
+      else
+        {:error, "Invalid amount format"}
       end
-
     end
   end
 
@@ -130,9 +122,10 @@ defmodule StoneChallenge.Banking do
         amount
       ) do
     account_to = Accounts.get_account!(account_to_id)
-    value = Decimal.from_float(amount)
 
-    if account_to != nil do
+    value = StringsHelper.parse_float(amount)
+
+    if account_from != nil && value != nil do
       cond do
         # Verify if user has money
         account_from.id == account_to.id ->
@@ -151,7 +144,11 @@ defmodule StoneChallenge.Banking do
           end
       end
     else
-      {:error, "The account that you trying to transfer not exists"}
+      if account_from == nil do
+        {:error, "Invalid account"}
+      else
+        {:error, "Invalid amount format"}
+      end
     end
   end
 

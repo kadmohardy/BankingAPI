@@ -44,35 +44,6 @@ defmodule StoneChallenge.Accounts do
     Repo.all(from u in User, where: u.role == "customer", preload: [:accounts])
   end
 
-  # def change_registration(%User{} = user, params) do
-  #   User.registration_changeset(user, params)
-  # end
-
-  # def register_user(attrs \\ %{}) do
-  #   %User{}
-  #   |> User.registration_changeset(attrs)
-  #   |> Repo.insert()
-  # end
-
-  # def get_user_account(id) do
-  #   query =
-  #     from u in User,
-  #       where: u.id == ^id,
-  #       preload: [:account]
-
-  #   Repo.one(query)
-  # end
-
-  # def get_user_by_account(account_number) do
-  #   query =
-  #     from u in User,
-  #       join: a in assoc(u, :account),
-  #       where: a.account_number == ^account_number,
-  #       preload: [account: a]
-
-  #   Repo.one(query)
-  # end
-
   def sign_in(email, password) do
     user = get_user_by(%{email: email})
 

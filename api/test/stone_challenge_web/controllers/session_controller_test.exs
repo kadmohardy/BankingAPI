@@ -7,11 +7,11 @@ defmodule StoneChallengeWeb.UserControllerTest do
   require Logger
 
   describe "testing session with valid user" do
-    @create_session_valid_attrs %{email: "customertest@gmail.com", password: "123456"}
+    @create_session_valid_attrs %{email: "admintest@gmail.com", password: "123456"}
     @create_session_invalid_attrs %{email: "invaliduser@gmail.com", password: "123456"}
 
     setup %{conn: conn} do
-      user = user_fixture()
+      user = user_admin_fixture()
 
       {:ok, conn: conn, user: user}
     end

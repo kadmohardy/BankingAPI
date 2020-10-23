@@ -48,8 +48,6 @@ defmodule StoneChallenge.AccountsTest do
     end
 
     test "invalid password size" do
-      Logger.debug("testing")
-
       attrs = Map.put(@valid_attrs, :password, "12345")
       {:error, changeset} = Accounts.sign_up(attrs)
 
@@ -58,8 +56,6 @@ defmodule StoneChallenge.AccountsTest do
     end
 
     test "different password and confirmation password" do
-      Logger.debug("testing")
-
       attrs = Map.put(@valid_attrs, :password_confirmation, "12345")
       {:error, changeset} = Accounts.sign_up(attrs)
 

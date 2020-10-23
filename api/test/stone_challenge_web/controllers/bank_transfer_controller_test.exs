@@ -28,12 +28,11 @@ defmodule StoneChallengeWeb.BankTransferControllerTest do
         |> put_req_header("authorization", "Bearer " <> @user_customer_token)
         |> post("/api/transactions/transfer", %{
           account_to: account_to.id,
-          amount: 10.50
+          amount: "10.50"
         })
 
       body = api_conn |> response(200) |> Poison.decode!()
 
-      Logger.info("TESTANDO #{inspect(body)}")
       assert body["account"]["balance"] == "989.50"
       assert body["account"]["account_id"] == account_from.id
       assert body["transaction"]["account_from"] == account_from.id
@@ -51,7 +50,7 @@ defmodule StoneChallengeWeb.BankTransferControllerTest do
         |> put_req_header("authorization", "Bearer " <> @user_customer_token)
         |> post("/api/transactions/transfer", %{
           account_to: account_to.id,
-          amount: 2010.50
+          amount: "2010.50"
         })
 
       body = api_conn |> response(422) |> Poison.decode!()
@@ -68,12 +67,12 @@ defmodule StoneChallengeWeb.BankTransferControllerTest do
         |> put_req_header("authorization", "Bearer " <> @user_customer_token)
         |> post("/api/transactions/transfer", %{
           account_to: account_to.id,
-          amount: -200.50
+          amount: "-200.50"
         })
 
       body = api_conn |> response(422) |> Poison.decode!()
 
-      assert body["message"] == "The amount should be more than zero"
+      assert body["message"] == "Invalid amount format"
     end
 
     test "testing bank transfer transaction to self account", %{
@@ -85,7 +84,7 @@ defmodule StoneChallengeWeb.BankTransferControllerTest do
         |> put_req_header("authorization", "Bearer " <> @user_customer_token)
         |> post("/api/transactions/transfer", %{
           account_to: account_from.id,
-          amount: 10.50
+          amount: "10.50"
         })
 
       body = api_conn |> response(422) |> Poison.decode!()

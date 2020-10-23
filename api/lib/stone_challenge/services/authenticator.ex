@@ -9,11 +9,11 @@ defmodule StoneChallenge.Services.Authenticator do
   @secret "CHANGE_ME_k7kTxvFAgeBvAVA0OR1vkPbTi8mZ5m"
 
   def generate_token(user) do
-    Phoenix.Token.sign(@secret, @seed, user, max_age: 86_400)
+    Phoenix.Token.sign(@secret, @seed, user)
   end
 
   def verify_token(token) do
-    case Phoenix.Token.verify(@secret, @seed, token, max_age: 86_400) do
+    case Phoenix.Token.verify(@secret, @seed, token) do
       {:ok, _id} -> {:ok, token}
       error -> error
     end
