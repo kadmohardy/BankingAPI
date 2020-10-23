@@ -30,10 +30,10 @@ defmodule StoneChallenge.DataCase do
   end
 
   setup tags do
-    :ok = Sandbox.checkout(StoneChallenge.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(StoneChallenge.Repo)
 
     unless tags[:async] do
-      Sandbox.mode(StoneChallenge.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(StoneChallenge.Repo, {:shared, self()})
     end
 
     :ok

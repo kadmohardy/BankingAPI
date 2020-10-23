@@ -6,6 +6,8 @@ defmodule StoneChallengeWeb.Plugs.Authenticate do
 
   alias StoneChallenge.Services.Authenticator
   alias StoneChallenge.Tokens
+  require Logger
+
   def init(opts), do: opts
 
   def call(conn, _default) do
@@ -17,7 +19,7 @@ defmodule StoneChallengeWeb.Plugs.Authenticate do
         end
 
       _ ->
-        unauthorized(conn)
+        {:error, "User not authorized"}
     end
   end
 
@@ -29,6 +31,7 @@ defmodule StoneChallengeWeb.Plugs.Authenticate do
   end
 
   defp unauthorized(conn) do
+    Logger.debug("NAO AUTORIZADO #$@#$@#$@#$@#$@#$@#$@#$@#$")
     conn |> put_resp_content_type("application/json") |> send_resp(401, "Unauthorized") |> halt()
   end
 end

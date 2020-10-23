@@ -1,5 +1,5 @@
 defmodule StoneChallenge.Helper.BankingHelper do
-@moduledoc """
+  @moduledoc """
   This module describe auxiliar functions used in banking operations
   """
 

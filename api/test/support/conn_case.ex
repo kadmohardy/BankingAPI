@@ -22,10 +22,10 @@ defmodule StoneChallengeWeb.ConnCase do
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
-      import StoneChallengeWeb.TestHelpers
+      import StoneChallenge.TestHelpers
       import StoneChallengeWeb.ConnCase
 
-      alias Ecto.Adapters.SQL.Sandbox
+      import Ecto.Adapters.SQL.Sandbox
       alias StoneChallengeWeb.Router.Helpers, as: Routes
 
       # The default endpoint for testing
@@ -34,10 +34,10 @@ defmodule StoneChallengeWeb.ConnCase do
   end
 
   setup tags do
-    :ok = Sandbox.checkout(StoneChallenge.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(StoneChallenge.Repo)
 
     unless tags[:async] do
-      Sandbox.mode(StoneChallenge.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(StoneChallenge.Repo, {:shared, self()})
     end
 
     {:ok, conn: Phoenix.ConnTest.build_conn()}

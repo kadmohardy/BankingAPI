@@ -4,12 +4,11 @@ defmodule StoneChallengeWeb.UserController do
   alias StoneChallenge.Accounts
 
   action_fallback StoneChallengeWeb.FallbackController
+  plug :validate_permission when action in [:index, :show]
 
   def index(conn, _params) do
-    with {:ok, users} <- Accounts.get_users() do
+    with users <- Accounts.list_customer_users() do
       conn
-      |> put_status(:created)
-      # |> put_resp_header("location", Routes.user_path(conn, :show, id: user.id))
       |> render(StoneChallengeWeb.UserView, "index.json", users: users)
     end
   end
@@ -28,5 +27,18 @@ defmodule StoneChallengeWeb.UserController do
 
     conn
     |> render("show.json", user: user)
+  end
+
+  def validate_permission(conn, _) do
+    role = conn.assigns.signed_user.role
+
+    if role == "admin" do
+      conn
+    else
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(401, "Unauthorized")
+      |> halt()
+    end
   end
 end

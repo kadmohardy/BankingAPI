@@ -5,6 +5,7 @@ defmodule StoneChallengeWeb.BankDraftController do
   action_fallback StoneChallengeWeb.FallbackController
 
   require Logger
+  plug :validate_permission when action in [:create]
 
   def create(
         conn,
@@ -21,6 +22,19 @@ defmodule StoneChallengeWeb.BankDraftController do
         "bank_draft.json",
         %{account: account, transaction: transaction}
       )
+    end
+  end
+
+  def validate_permission(conn, _) do
+    role = conn.assigns.signed_user.role
+
+    if role == "customer" do
+      conn
+    else
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(401, "Unauthorized")
+      |> halt()
     end
   end
 end

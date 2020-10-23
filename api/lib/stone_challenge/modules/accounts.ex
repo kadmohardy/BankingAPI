@@ -41,9 +41,7 @@ defmodule StoneChallenge.Accounts do
   end
 
   def list_customer_users do
-    query = from u in User, where: u.role == "customer", preload: [:accounts]
-
-    Repo.all(query)
+    Repo.all(from u in User, where: u.role == "customer", preload: [:accounts])
   end
 
   # def change_registration(%User{} = user, params) do
