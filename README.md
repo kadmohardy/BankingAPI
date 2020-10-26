@@ -117,7 +117,13 @@ Stone.postman_collection.json
 ```` 
 that could be used to test API.
 
-## 3. Deployed version 
+## 3. Tests 
+The tests for api are present in /test. For models, tests could be started using 
+````mix test test/stone_challenge/accounts_test.exs
+mix test test/stone_challenge/banking_test.exs
+mix test test/stone_challenge/tokens_test.exs````
+
+## 4. Deployed version 
 The server was deployed on a digital ocean server. We have a docker container running a PostGres db instance. You can vizualize on the following route.
 http://104.248.48.177 [StoneChallengeAPI](http://104.248.48.177). For API requests use 
 
