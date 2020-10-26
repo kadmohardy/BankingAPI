@@ -133,19 +133,11 @@ mix test test/stone_challenge/tokens_test.exs
 for controllers,
 
 ````
-mix test test/stone_challenge_web/controllers/page_controller_test.exs
-````
-````
-mix test test/stone_challenge_web/controllers/user_controller_test.exs
-````
-````
-mix test test/stone_challenge_web/controllers/session_controller_test.exs
-````
-````
-mix test test/stone_challenge_web/controllers/bank_draft_controller_test.exs
-````
-````
-mix test test/stone_challenge_web/controllers/bank_transfer_controller_test.exs
+	mix test test/stone_challenge_web/controllers/page_controller_test.exs
+	mix test test/stone_challenge_web/controllers/user_controller_test.exs
+	mix test test/stone_challenge_web/controllers/session_controller_test.exs
+	mix test test/stone_challenge_web/controllers/bank_draft_controller_test.exs
+	mix test test/stone_challenge_web/controllers/bank_transfer_controller_test.exs
 ````,
 
 and, finally, for views, 
