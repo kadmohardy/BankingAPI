@@ -119,11 +119,13 @@ that could be used to test API.
 
 ## 3. Tests 
 The tests for api are present in /test. For models, tests could be started using 
+
 ````mix test test/stone_challenge/accounts_test.exs````
 ````mix test test/stone_challenge/banking_test.exs````
 ````mix test test/stone_challenge/tokens_test.exs````,
 
 for controllers,
+
 ````mix test test/stone_challenge_web/controllers/page_controller_test.exs````
 ````mix test test/stone_challenge_web/controllers/user_controller_test.exs````
 ````mix test test/stone_challenge_web/controllers/session_controller_test.exs````
@@ -131,6 +133,7 @@ for controllers,
 ````mix test test/stone_challenge_web/controllers/bank_transfer_controller_test.exs````,
 
 and, finally, for views, 
+
 ````mix test test/stone_challenge_web/views/bank_draft_view_test.exs````
 ````mix test test/stone_challenge_web/views/bank_transfer_view_test.exs````
 ````mix test test/stone_challenge_web/views/user_view_test.exs````
