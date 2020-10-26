@@ -43,15 +43,15 @@ Following, we have a example of response:
 To authenticate a customer user it is necessary give authentication token you can send a POST request to ````localhost:4000/sessions```` with following json body
 ````
 {
-	"account_number": "000000", 
-  	"password": "user password"
+	"email": "email@email.com", 
+  	"password": "password"
 }
 ```` 
 and for admin user 
 ````
 {
-	"email": "user@email.com", 
-  	"password": "user password"
+	"email": "email@email.com", 
+  	"password": "password"
 }
 ```` 
 
@@ -78,7 +78,6 @@ To make a bank transfer you need send a POST request to ````localhost:4000/sessi
 ````
 {
 	"amount": "12.75",                   				// amount of money (format should be "$$.$$")
-	"type": 2,                          				// type of transaction (1: bank draft, 2: bank transfer)    
 	"target_account_id": "aa6de8e2-fcef-4202-b9ca-1666c30dc9ed"   	// target account number 
 }
 ````
