@@ -65,23 +65,21 @@ After that, the user receives a authentication token, like this:
 ````
 
 ### 1.3 Banking trasactions
-We have two transaction types: bank draft and bank transfer. To make a bank transfer you need send a POST request to ````localhost:4000/transactions```` with following json body 
+We have two transaction types: bank draft and bank transfer. To make a bank transfer you need send a POST request to ````localhost:4000/transactions/draft```` with following json body 
 
 ````
 {
-	"amount": 50,                       // amount of money
-	"type": 1,                          // type of transaction (1: bank draft, 2: bank transfer)    
-	"target_account_number": "197003"   // target account number (if bank draft, target_account_number is same of account_number of user that make transaction)
+	"amount": "12.75",                       // amount of money (format should be "$$.$$")
 }
 ````
 
-To make a bank transfer you need send a POST request to ````localhost:4000/sessions```` with following json body
+To make a bank transfer you need send a POST request to ````localhost:4000/sessions/transfer```` with following json body
 
 ````
 {
-	"amount": 50,                       // amount of money (integers values)
-	"type": 2,                          // type of transaction (1: bank draft, 2: bank transfer)    
-	"target_account_number": "197004"   // target account number (if bank draft, target_account_number is same of account_number of user that make transaction)
+	"amount": "12.75",                   				// amount of money (format should be "$$.$$")
+	"type": 2,                          				// type of transaction (1: bank draft, 2: bank transfer)    
+	"target_account_id": "aa6de8e2-fcef-4202-b9ca-1666c30dc9ed"   	// target account number 
 }
 ````
 
