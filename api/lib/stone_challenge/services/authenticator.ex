@@ -4,9 +4,9 @@ defmodule StoneChallenge.Services.Authenticator do
   """
 
   require Logger
-  @seed "stone user token"
 
-  @secret "CHANGE_ME_k7kTxvFAgeBvAVA0OR1vkPbTi8mZ5m"
+  @seed System.get_env("TOKENS_SEED")
+  @secret System.get_env("TOKENS_SECRET")
 
   def generate_token(user) do
     Phoenix.Token.sign(@secret, @seed, user, max_age: 60 * 86_400)
