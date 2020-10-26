@@ -63,7 +63,6 @@ defmodule StoneChallengeWeb.UserViewTest do
       account: account, user: user
       )
 
-    Logger.debug("TESTANDO #{inspect(rendered_account)}")
     assert rendered_account == %{
         account_id: account.id,
         balance: account.balance,
