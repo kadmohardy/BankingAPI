@@ -16,11 +16,12 @@ The main modules of api are ````accounts```` and ````banking````. In these modul
 To register a new user you can send a POST request to ````localhost:4000/users```` with following json body
 ````
 {
-	"name": "User Name",
+	"first_name": "First Name",
+	"last_name": "Last Name",
 	"email": "useremail@gmail.com", 
-	"password": "user password", 
-	"customer": true (for customer) || false (for backoffice admin)	
-	
+  	"role": "admin" -> for backoffice user or "customer" -> for customer user	
+	"password": "Password"	
+	"password_confirmation": "Password Confirmation" 
 }
 ````
 
