@@ -55,7 +55,7 @@ defmodule StoneChallengeWeb.BankTransferControllerTest do
 
       body = api_conn |> response(422) |> Poison.decode!()
 
-      assert body["message"] == "You not have money"
+      assert body["error"] == "You not have money"
     end
 
     test "testing bank transfer transaction with customer valid user and negative amount", %{
@@ -72,7 +72,7 @@ defmodule StoneChallengeWeb.BankTransferControllerTest do
 
       body = api_conn |> response(422) |> Poison.decode!()
 
-      assert body["message"] == "Invalid amount format"
+      assert body["error"] == "Invalid amount format"
     end
 
     test "testing bank transfer transaction to self account", %{
@@ -89,7 +89,7 @@ defmodule StoneChallengeWeb.BankTransferControllerTest do
 
       body = api_conn |> response(422) |> Poison.decode!()
 
-      assert body["message"] == "You can't transfer money to your account."
+      assert body["error"] == "You can't transfer money to your account."
     end
   end
 end

@@ -3,8 +3,7 @@ defmodule StoneChallengeWeb.BankDraftController do
 
   alias StoneChallenge.Banking
   action_fallback StoneChallengeWeb.FallbackController
-
-  require Logger
+  plug :validate_parameters when action in [:create]
   plug :validate_permission when action in [:create]
 
   def create(
@@ -33,6 +32,20 @@ defmodule StoneChallengeWeb.BankDraftController do
       |> put_resp_content_type("application/json")
       |> send_resp(401, "Unauthorized")
       |> halt()
+    end
+  end
+
+  def validate_parameters(conn, _) do
+    amount = conn.params["amount"]
+
+    conn
+    if amount != nil do
+      conn
+    else
+      conn
+      |> put_status(:unprocessable_entity)
+      |> render(StoneChallengeWeb.ErrorView, "error_message.json", message: "amount should be provided")
+      |> halt
     end
   end
 end

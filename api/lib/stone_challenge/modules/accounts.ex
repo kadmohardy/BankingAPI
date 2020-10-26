@@ -24,6 +24,8 @@ defmodule StoneChallenge.Accounts do
 
   def get_account!(id) do
     Repo.get(Account, id) |> Repo.preload(:user)
+  rescue
+    Ecto.Query.CastError -> :invalid_uuid
   end
 
   def get_user(id), do: Repo.get(User, id)

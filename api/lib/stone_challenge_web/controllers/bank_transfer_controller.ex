@@ -6,6 +6,7 @@ defmodule StoneChallengeWeb.BankTransferController do
 
   require Logger
   plug :validate_permission when action in [:create]
+  plug :validate_parameters when action in [:create]
 
   def create(
         conn,
@@ -39,6 +40,21 @@ defmodule StoneChallengeWeb.BankTransferController do
       |> put_resp_content_type("application/json")
       |> send_resp(401, "error: Unauthorized")
       |> halt()
+    end
+  end
+
+  def validate_parameters(conn, _) do
+    amount = conn.params["amount"]
+    account_to = conn.params["account_to"]
+
+    conn
+    if amount != nil && account_to != nil do
+      conn
+    else
+      conn
+      |> put_status(:unprocessable_entity)
+      |> render(StoneChallengeWeb.ErrorView, "error_message.json", message: "amount and account_to should be provided")
+      |> halt
     end
   end
 end

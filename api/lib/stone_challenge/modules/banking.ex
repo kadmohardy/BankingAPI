@@ -126,8 +126,11 @@ defmodule StoneChallenge.Banking do
     value = StringsHelper.parse_float(amount)
 
     cond do
-      account_from == nil ->
-        {:error, "Invalid account"}
+      account_to == :invalid_uuid ->
+        {:error, "Invalid account_to format"}
+
+      account_to == nil ->
+        {:error, "Invalid account_to"}
 
       value == nil ->
         {:error, "Invalid amount format"}

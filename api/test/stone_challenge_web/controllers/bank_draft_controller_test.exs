@@ -54,7 +54,7 @@ defmodule StoneChallengeWeb.BankDraftControllerTest do
 
       body = api_conn |> response(422) |> Poison.decode!()
 
-      assert body["message"] == "You not have money"
+      assert body["error"] == "You not have money"
     end
 
     test "testing bank draft transaction with customer valid user and negative amount", %{
@@ -68,7 +68,7 @@ defmodule StoneChallengeWeb.BankDraftControllerTest do
 
       body = api_conn |> response(422) |> Poison.decode!()
 
-      assert body["message"] == "Invalid amount format"
+      assert body["error"] == "Invalid amount format"
     end
   end
 end

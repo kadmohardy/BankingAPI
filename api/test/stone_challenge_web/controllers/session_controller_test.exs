@@ -33,7 +33,7 @@ defmodule StoneChallengeWeb.SessionControllerTest do
         |> post("/api/sessions", @create_session_invalid_attrs)
 
       body = api_conn |> response(422) |> Poison.decode!()
-      assert body["message"] == "User not have account"
+      assert body["error"] == "User not have account"
     end
   end
 end
