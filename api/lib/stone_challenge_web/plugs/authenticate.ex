@@ -2,10 +2,12 @@ defmodule StoneChallengeWeb.Plugs.Authenticate do
   @moduledoc """
   This module describe authenticate plug
   """
+  use Phoenix.Controller
   import Plug.Conn
 
   alias StoneChallenge.Services.Authenticator
   alias StoneChallenge.Tokens
+
   require Logger
 
   def init(opts), do: opts
@@ -32,8 +34,8 @@ defmodule StoneChallengeWeb.Plugs.Authenticate do
 
   defp unauthorized(conn) do
     conn
-    |> put_resp_content_type("application/json")
-    |> send_resp(401, "error: Unauthorized")
-    |> halt()
+    |> put_status(:unprocessable_entity)
+    |> render(StoneChallengeWeb.ErrorView, "error_message.json", message: "Unauthorized")
+    |> halt
   end
 end

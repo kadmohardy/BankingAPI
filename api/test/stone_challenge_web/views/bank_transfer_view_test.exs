@@ -10,22 +10,23 @@ defmodule StoneChallengeWeb.BankTransferViewTest do
       balance: 987.50
     }
 
-    transaction =
-      %Transaction{
-        id: "dc198650-4a44-41e6-ad92-e7b42ab9dead",
-        amount: 12.50,
-        account_from: "0d5c0fa7-657e-4b20-a246-3cbdfdc6fd4a",
-        account_to: "aa6de8e2-fcef-4202-b9ca-1666c30dc9ed",
-        type: "bank_transfer",
-        date: "2020-10-15"
-      }
+    transaction = %Transaction{
+      id: "dc198650-4a44-41e6-ad92-e7b42ab9dead",
+      amount: 12.50,
+      account_from: "0d5c0fa7-657e-4b20-a246-3cbdfdc6fd4a",
+      account_to: "aa6de8e2-fcef-4202-b9ca-1666c30dc9ed",
+      type: "bank_transfer",
+      date: "2020-10-15"
+    }
 
-    rendered_bank_draft = render(
-      StoneChallengeWeb.BankTransferView,
-      "bank_transfer.json",
-      conn: conn,
-      account: account,
-      transaction: transaction)
+    rendered_bank_draft =
+      render(
+        StoneChallengeWeb.BankTransferView,
+        "bank_transfer.json",
+        conn: conn,
+        account: account,
+        transaction: transaction
+      )
 
     assert rendered_bank_draft.account.account_id == account.id
     assert rendered_bank_draft.account.balance == account.balance
@@ -35,6 +36,5 @@ defmodule StoneChallengeWeb.BankTransferViewTest do
     assert rendered_bank_draft.transaction.amount == transaction.amount
     assert rendered_bank_draft.transaction.date == transaction.date
     assert rendered_bank_draft.transaction.type == transaction.type
-
   end
 end

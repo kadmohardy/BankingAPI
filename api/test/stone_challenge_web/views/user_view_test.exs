@@ -26,18 +26,21 @@ defmodule StoneChallengeWeb.UserViewTest do
           id: "4d41121d-fb2f-4895-abe4-818d2d8a4bf6",
           balance: 1000.00
         }
-      },
+      }
     ]
 
-    rendered_users = render(
-      StoneChallengeWeb.UserView,
-      "index.json",
-      conn: conn,
-      users: users)
+    rendered_users =
+      render(
+        StoneChallengeWeb.UserView,
+        "index.json",
+        conn: conn,
+        users: users
+      )
 
     assert rendered_users == %{
-      data: Enum.map(users, fn item -> StoneChallengeWeb.UserView.user_account_json(item) end)
-    }
+             data:
+               Enum.map(users, fn item -> StoneChallengeWeb.UserView.user_account_json(item) end)
+           }
   end
 
   test "renders account.json", %{conn: conn} do
@@ -47,7 +50,7 @@ defmodule StoneChallengeWeb.UserViewTest do
         email: "user1@gmail.com",
         first_name: "User1",
         last_name: "Test1",
-        role: "customer",
+        role: "customer"
       },
       %StoneChallenge.Accounts.Account{
         id: "5cd95c73-f522-4bd9-935c-70643052cd88",
@@ -55,24 +58,25 @@ defmodule StoneChallengeWeb.UserViewTest do
       }
     }
 
-
-    rendered_account = render(
-      StoneChallengeWeb.UserView,
-      "account.json",
-      conn: conn,
-      account: account, user: user
+    rendered_account =
+      render(
+        StoneChallengeWeb.UserView,
+        "account.json",
+        conn: conn,
+        account: account,
+        user: user
       )
 
     assert rendered_account == %{
-        account_id: account.id,
-        balance: account.balance,
-        user: %{
-          id: user.id,
-          email: user.email,
-          first_name: user.first_name,
-          last_name: user.last_name,
-          role: user.role,
-        }
-      }
+             account_id: account.id,
+             balance: account.balance,
+             user: %{
+               id: user.id,
+               email: user.email,
+               first_name: user.first_name,
+               last_name: user.last_name,
+               role: user.role
+             }
+           }
   end
 end

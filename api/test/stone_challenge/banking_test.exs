@@ -44,7 +44,7 @@ defmodule StoneChallenge.BankingTest do
       account_two = account_two_fixture()
 
       {:ok, account_from, transaction} =
-               Banking.bank_transfer_transaction(account_one, account_two.id, "15.50")
+        Banking.bank_transfer_transaction(account_one, account_two.id, "15.50")
 
       assert transaction.type == "bank_transfer"
       assert transaction.amount == Decimal.new(15.50)

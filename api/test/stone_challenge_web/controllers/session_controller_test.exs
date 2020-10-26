@@ -1,4 +1,4 @@
-defmodule StoneChallengeWeb.UserControllerTest do
+defmodule StoneChallengeWeb.SessionControllerTest do
   @moduledoc """
   This module describe user controller test
   """
@@ -7,11 +7,11 @@ defmodule StoneChallengeWeb.UserControllerTest do
   require Logger
 
   describe "testing session with valid user" do
-    @create_session_valid_attrs %{email: "admintest@gmail.com", password: "123456"}
+    @create_session_valid_attrs %{email: "customertest@gmail.com", password: "123456"}
     @create_session_invalid_attrs %{email: "invaliduser@gmail.com", password: "123456"}
 
     setup %{conn: conn} do
-      user = user_admin_fixture()
+      user = user_fixture()
 
       {:ok, conn: conn, user: user}
     end
@@ -22,6 +22,8 @@ defmodule StoneChallengeWeb.UserControllerTest do
         |> post("/api/sessions", @create_session_valid_attrs)
 
       body = api_conn |> response(200) |> Poison.decode!()
+
+      Logger.debug(body["data"]["token"])
       assert String.length(body["data"]["token"]) > 0
     end
 
