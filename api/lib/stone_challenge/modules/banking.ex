@@ -125,30 +125,28 @@ defmodule StoneChallenge.Banking do
 
     value = StringsHelper.parse_float(amount)
 
-    if account_from != nil && value != nil do
-      cond do
-        # Verify if user has money
-        account_from.id == account_to.id ->
-          {:error, "You can't transfer money to your account."}
-
-        Decimal.negative?(value) ->
-          {:error, "The amount should be more than zero"}
-
-        BankingHelper.is_negative_balance(account_from.balance, value) ->
-          {:error, "You not have money"}
-
-        true ->
-          case create_transfer_transaction(account_from, account_to, value) do
-            {:ok, account_from, transaction} -> {:ok, account_from, transaction}
-            {:error, changeset} -> {:error, changeset}
-          end
-      end
-    else
-      if account_from == nil do
+    cond do
+      account_from == nil ->
         {:error, "Invalid account"}
-      else
+
+      value == nil ->
         {:error, "Invalid amount format"}
-      end
+
+      # Verify if user has money
+      account_from.id == account_to.id ->
+        {:error, "You can't transfer money to your account."}
+
+      Decimal.negative?(value) ->
+        {:error, "The amount should be more than zero"}
+
+      BankingHelper.is_negative_balance(account_from.balance, value) ->
+        {:error, "You not have money"}
+
+      true ->
+        case create_transfer_transaction(account_from, account_to, value) do
+          {:ok, account_from, transaction} -> {:ok, account_from, transaction}
+          {:error, changeset} -> {:error, changeset}
+        end
     end
   end
 
