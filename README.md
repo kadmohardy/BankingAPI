@@ -43,15 +43,15 @@ Following, we have a example of response:
 To authenticate a customer user it is necessary give authentication token you can send a POST request to ````localhost:4000/sessions```` with following json body
 ````
 {
-	"account_number": "000000", 
-  	"password": "user password"
+	"email": "email@email.com", 
+  	"password": "password"
 }
 ```` 
 and for admin user 
 ````
 {
-	"email": "user@email.com", 
-  	"password": "user password"
+	"email": "email@email.com", 
+  	"password": "password"
 }
 ```` 
 
@@ -65,23 +65,20 @@ After that, the user receives a authentication token, like this:
 ````
 
 ### 1.3 Banking trasactions
-We have two transaction types: bank draft and bank transfer. To make a bank transfer you need send a POST request to ````localhost:4000/transactions```` with following json body 
+We have two transaction types: bank draft and bank transfer. To make a bank transfer you need send a POST request to ````localhost:4000/transactions/draft```` with following json body 
 
 ````
 {
-	"amount": 50,                       // amount of money
-	"type": 1,                          // type of transaction (1: bank draft, 2: bank transfer)    
-	"target_account_number": "197003"   // target account number (if bank draft, target_account_number is same of account_number of user that make transaction)
+	"amount": "12.75",                       // amount of money (format should be "$$.$$")
 }
 ````
 
-To make a bank transfer you need send a POST request to ````localhost:4000/sessions```` with following json body
+To make a bank transfer you need send a POST request to ````localhost:4000/sessions/transfer```` with following json body
 
 ````
 {
-	"amount": 50,                       // amount of money (integers values)
-	"type": 2,                          // type of transaction (1: bank draft, 2: bank transfer)    
-	"target_account_number": "197004"   // target account number (if bank draft, target_account_number is same of account_number of user that make transaction)
+	"amount": "12.75",                   				// amount of money (format should be "$$.$$")
+	"target_account_id": "aa6de8e2-fcef-4202-b9ca-1666c30dc9ed"   	// target account number 
 }
 ````
 
@@ -117,7 +114,34 @@ Stone.postman_collection.json
 ```` 
 that could be used to test API.
 
-## 3. Deployed version 
+## 3. Tests 
+The tests for api are present in /test. For models, tests could be started using 
+
+````
+	mix test test/stone_challenge/accounts_test.exs
+	mix test test/stone_challenge/banking_test.exs
+	mix test test/stone_challenge/tokens_test.exs
+````
+, for controllers,
+````
+	mix test test/stone_challenge_web/controllers/page_controller_test.exs
+	mix test test/stone_challenge_web/controllers/user_controller_test.exs
+	mix test test/stone_challenge_web/controllers/session_controller_test.exs
+	mix test test/stone_challenge_web/controllers/bank_draft_controller_test.exs
+	mix test test/stone_challenge_web/controllers/bank_transfer_controller_test.exs
+````
+, and, finally, for views, 
+
+
+````
+	mix test test/stone_challenge_web/views/bank_draft_view_test.exs
+	mix test test/stone_challenge_web/views/bank_transfer_view_test.exs
+	mix test test/stone_challenge_web/views/user_view_test.exs
+	mix test test/stone_challenge_web/views/session_view_test.exs
+	mix test test/stone_challenge_web/views/reports_view_test.exs
+````
+
+## 4. Deployed version 
 The server was deployed on a digital ocean server. We have a docker container running a PostGres db instance. You can vizualize on the following route.
 http://104.248.48.177 [StoneChallengeAPI](http://104.248.48.177). For API requests use 
 
