@@ -19,7 +19,7 @@ To register a new user you can send a POST request to ````localhost:4000/users``
 	"first_name": "First Name",
 	"last_name": "Last Name",
 	"email": "useremail@gmail.com", 
-  	"role": "admin": for backoffice user or "customer": for customer user	
+  	"role": "admin" -> for backoffice user or "customer" -> for customer user	
 	"password": "Password"	
 	"password_confirmation": "Password Confirmation" 
 }
