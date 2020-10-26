@@ -24,7 +24,6 @@ defmodule StoneChallengeWeb.SessionController do
     email = conn.params["email"]
     password = conn.params["password"]
 
-    conn
     if email != nil && password != nil do
       conn
     else

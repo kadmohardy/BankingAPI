@@ -29,16 +29,15 @@ defmodule StoneChallengeWeb.BankDraftController do
       conn
     else
       conn
-      |> put_resp_content_type("application/json")
-      |> send_resp(401, "Unauthorized")
-      |> halt()
+      |> put_status(:unprocessable_entity)
+      |> render(StoneChallengeWeb.ErrorView, "error_message.json", message: "Unauthorized")
+      |> halt
     end
   end
 
   def validate_parameters(conn, _) do
     amount = conn.params["amount"]
 
-    conn
     if amount != nil do
       conn
     else
