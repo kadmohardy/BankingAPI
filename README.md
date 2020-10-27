@@ -154,6 +154,7 @@ The tests for api are present in /test. For models, tests could be started using
 	mix test test/stone_challenge_web/views/session_view_test.exs
 	mix test test/stone_challenge_web/views/reports_view_test.exs
 ````
+or, use ```` mix test```` to run all tests
 
 ## 4. Deployed version 
 The server was deployed on a digital ocean server. We have a docker container running a PostGres db instance. You can vizualize on the following route.
