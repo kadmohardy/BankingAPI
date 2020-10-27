@@ -1,5 +1,5 @@
 # Stone Challenge API
-API developed by Kadmo Hardy.
+Banking API developed by Kadmo Hardy using Elixir/Phoenix.
 
 To start your Phoenix server:
 
@@ -25,17 +25,31 @@ To register a new user you can send a POST request to ````localhost:4000/users``
 }
 ````
 
-Following, we have a example of response: 
+Following, we have a example of response for customer register: 
 ````
 {
-    "account": {
-        "account_number": "197023",
-        "name": 1000
-    },
-    "email": "joao10@gmail.com",
-    "id": 23,
-    "name": "Joao10"
-    "customer": true
+    data: {
+    	"account_id": "0cef1dee-ca6d-4d23-b191-3f46e44d6753",
+        "balance": 1000,
+        "user": {
+            "email": "customer12@gmail.com",
+            "first_name": "Customer12",
+            "id": "b8965d09-c2f7-44b3-bbbd-f7f8c771051a",
+            "last_name": "Customer12",
+            "role": "customer"
+        }
+}
+````
+and for admin backoffice, we have: 
+````
+{
+     "data": {
+        "email": "backoffice14@gmail.com",
+        "first_name": "Backoffice14",
+        "id": "b37616cf-418f-4f10-a31b-95fcd45addc7",
+        "last_name": "BackofficeLast14",
+        "role": "admin"
+    }
 }
 ````
 
@@ -83,8 +97,7 @@ To make a bank transfer you need send a POST request to ````localhost:4000/sessi
 }
 ````
 
-It`s important to note that transaction operations needs an authentication token to be realized. We using integers number for money amount in order to simplify transactions process.
-
+It`s important to note that transaction operations needs an authentication token to be realized. 
 ### 1.4 Back Office
   The API provide a set of very simplistic reports that inform the total traded per day, month and year. To give diary report, the user needs make a GET request using the following route: 
   ````localhost:4000/reports?type=diary&day=07&month=08&year=2020````
@@ -141,9 +154,41 @@ The tests for api are present in /test. For models, tests could be started using
 	mix test test/stone_challenge_web/views/session_view_test.exs
 	mix test test/stone_challenge_web/views/reports_view_test.exs
 ````
+or, use ```` mix test```` to run all tests
 
 ## 4. Deployed version 
 The server was deployed on a digital ocean server. We have a docker container running a PostGres db instance. You can vizualize on the following route.
 http://104.248.48.177 [StoneChallengeAPI](http://104.248.48.177). For API requests use 
 
 ````http://104.248.48.177/api````
+
+## 5. Reponse format
+
+The response could be following formats: 
+
+For success response,
+```` 
+	{ 
+		data: {
+		     //elements
+		}
+	}
+```` 
+
+For changeset errors, 
+```` 
+	{ 
+		errors: [{
+		     //elements
+		}]
+	}
+```` 
+
+For general errors,
+```` 
+	{ 
+		error: "error message"
+	}
+```` 
+
+
