@@ -15,40 +15,13 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"account_number\": \"197001\", \n\t\"password\": \"123456\"\n}",
+							"raw": "{\n\t\"email\": \"customer2@gmail.com\", \n\t\"password\": \"123456\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": {
-							"raw": "{{base_url}}/sessions",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"sessions"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "sign_out",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
 						"url": {
 							"raw": "{{base_url_dev}}/sessions",
 							"host": [
@@ -94,13 +67,13 @@
 			"name": "Users",
 			"item": [
 				{
-					"name": "register_new_customer_user",
+					"name": "signup_new_customer_user",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\": \"Customer2\",\n\t\"email\": \"customer2@gmail.com\", \n\t\"password\": \"123456\", \n\t\"customer\": true\n}\n",
+							"raw": "{\n\t\"first_name\": \"Customer11\",\n\t\"last_name\": \"Customer11\",\n\t\"email\": \"customer11@gmail.com\", \n\t\"password\": \"123456\", \n\t\"password_confirmation\": \"123456\", \n\t\"role\": \"customer\"\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -108,9 +81,35 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/users",
+							"raw": "{{base_url_dev}}/users",
 							"host": [
-								"{{base_url}}"
+								"{{base_url_dev}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "signup_new_backoffice_user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"first_name\": \"Backoffice13\",\n\t\"last_name\": \"BackofficeLast13\",\n\t\"email\": \"backoffice13@gmail.com\", \n\t\"password\": \"123456\", \n\t\"password_confirmation\": \"123456\", \n\t\"role\": \"admin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_dev}}/users",
+							"host": [
+								"{{base_url_dev}}"
 							],
 							"path": [
 								"users"
@@ -127,7 +126,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{customer_token}}",
+									"value": "{{backoffice_token}}",
 									"type": "string"
 								}
 							]
@@ -135,35 +134,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/users",
+							"raw": "{{base_url_dev}}/users",
 							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "register_new_backoffice_user",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"name\": \"Backoffice1\",\n\t\"email\": \"backoffice1@gmail.com\", \n\t\"password\": \"123456\", \n\t\"customer\": false\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/users",
-							"host": [
-								"{{base_url}}"
+								"{{base_url_dev}}"
 							],
 							"path": [
 								"users"
@@ -195,7 +168,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"amount\": 50,\n\t\"type\": 1, \n\t\"target_account_number\": \"197001\"\n}\n",
+							"raw": "{\n\t\"amount\": \"00.00\"\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -203,12 +176,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/transactions",
+							"raw": "{{base_url_dev}}/transactions/draft",
 							"host": [
-								"{{base_url}}"
+								"{{base_url_dev}}"
 							],
 							"path": [
-								"transactions"
+								"transactions",
+								"draft"
 							]
 						}
 					},
@@ -231,7 +205,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"amount\": 50,\n\t\"type\": 2, \n\t\"target_account_number\": \"197002\"\n}\n",
+							"raw": "{\n\t\"amount\": \"00.01\",\n\t\"account_to\": \"6107be17-409a-4102-b56a-19705af79229\"\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -239,12 +213,50 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/transactions",
+							"raw": "{{base_url_dev}}/transactions/transfer",
 							"host": [
-								"{{base_url}}"
+								"{{base_url_dev}}"
 							],
 							"path": [
-								"transactions"
+								"transactions",
+								"transfer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "bank_transfer_self_account",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{customer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"amount\": \"12.24\",\n\t\"account_to\": \"44b48b28-a736-490d-a73c-3c156e20cfb4\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_dev}}/transactions/transfer",
+							"host": [
+								"{{base_url_dev}}"
+							],
+							"path": [
+								"transactions",
+								"transfer"
 							]
 						}
 					},
@@ -272,25 +284,21 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/reports?type=diary&day=14&month=08&year=2020",
+							"raw": "{{base_url_dev}}/reports?day=15&month=10&year=2020",
 							"host": [
-								"{{base_url}}"
+								"{{base_url_dev}}"
 							],
 							"path": [
 								"reports"
 							],
 							"query": [
 								{
-									"key": "type",
-									"value": "diary"
-								},
-								{
 									"key": "day",
-									"value": "14"
+									"value": "15"
 								},
 								{
 									"key": "month",
-									"value": "08"
+									"value": "10"
 								},
 								{
 									"key": "year",
@@ -317,18 +325,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/reports?type=monthly&month=08&year=2020",
+							"raw": "{{base_url_dev}}/reports?month=08&year=2020",
 							"host": [
-								"{{base_url}}"
+								"{{base_url_dev}}"
 							],
 							"path": [
 								"reports"
 							],
 							"query": [
-								{
-									"key": "type",
-									"value": "monthly"
-								},
 								{
 									"key": "month",
 									"value": "08"
@@ -358,18 +362,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/reports?type=yearly&year=2020",
+							"raw": "{{base_url_dev}}/reports?year=2020",
 							"host": [
-								"{{base_url}}"
+								"{{base_url_dev}}"
 							],
 							"path": [
 								"reports"
 							],
 							"query": [
-								{
-									"key": "type",
-									"value": "yearly"
-								},
 								{
 									"key": "year",
 									"value": "2020"
@@ -395,18 +395,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/reports?type=total",
+							"raw": "{{base_url_dev}}/reports",
 							"host": [
-								"{{base_url}}"
+								"{{base_url_dev}}"
 							],
 							"path": [
 								"reports"
-							],
-							"query": [
-								{
-									"key": "type",
-									"value": "total"
-								}
 							]
 						}
 					},
