@@ -74,9 +74,7 @@ defmodule StoneChallenge.Accounts do
   end
 
   def sign_up(attrs \\ %{}) do
-    Logger.info("------------------------------------------------------------")
     role = attrs["role"] || attrs.role
-    Logger.info(role)
 
     cond do
       role == "customer" ->

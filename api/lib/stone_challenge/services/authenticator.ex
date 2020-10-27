@@ -5,7 +5,6 @@ defmodule StoneChallenge.Services.Authenticator do
 
   require Logger
 
-
   @secret System.get_env("TOKEN_SECRET")
   @seed System.get_env("TOKEN_SEED")
 

@@ -26,7 +26,6 @@ defmodule StoneChallengeWeb.SessionControllerTest do
 
       body = api_conn |> response(200) |> Poison.decode!()
 
-      Logger.debug(body["data"]["token"])
       assert String.length(body["data"]["token"]) > 0
     end
 
