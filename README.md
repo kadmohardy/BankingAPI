@@ -1,5 +1,5 @@
 # Stone Challenge API
-API developed by Kadmo Hardy.
+Banking API developed by Kadmo Hardy using Elixir/Phoenix.
 
 To start your Phoenix server:
 
@@ -147,3 +147,31 @@ The server was deployed on a digital ocean server. We have a docker container ru
 http://104.248.48.177 [StoneChallengeAPI](http://104.248.48.177). For API requests use 
 
 ````http://104.248.48.177/api````
+
+## 5. Reponse format
+
+The response could be following formats: 
+
+```` 
+	{ 
+		data: {
+		     //elements
+		}
+	}
+```` 
+
+```` 
+	{ 
+		error: {
+		     //elements
+		}
+	}
+```` 
+
+```` 
+	{ 
+		errors: [{
+		     //elements
+		}]
+	}
+```` 
