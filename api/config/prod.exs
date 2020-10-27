@@ -22,7 +22,7 @@ config :logger, level: :info
 config :stone_challenge, StoneChallenge.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: System.get_env("USER"),
-  password: System.get_env("PASS"),
+  password: System.get_env("PASSWORD"),
   database: System.get_env("DATABASE"),
   hostname: System.get_env("HOST"),
   show_sensitive_data_on_connection_error: true,
