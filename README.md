@@ -28,14 +28,16 @@ To register a new user you can send a POST request to ````localhost:4000/users``
 Following, we have a example of response: 
 ````
 {
-    "account": {
-        "account_number": "197023",
-        "name": 1000
-    },
-    "email": "joao10@gmail.com",
-    "id": 23,
-    "name": "Joao10"
-    "customer": true
+    data: {
+	    "account": {
+		"account_number": "197023",
+		"name": 1000
+	    },
+	    "email": "joao10@gmail.com",
+	    "id": 23,
+	    "name": "Joao10"
+	    "customer": true
+	  }
 }
 ````
 
