@@ -43,7 +43,9 @@ defmodule StoneChallengeWeb.BankDraftController do
     else
       conn
       |> put_status(:unprocessable_entity)
-      |> render(StoneChallengeWeb.ErrorView, "error_message.json", message: "amount should be provided")
+      |> render(StoneChallengeWeb.ErrorView, "error_message.json",
+        message: "amount should be provided"
+      )
       |> halt
     end
   end

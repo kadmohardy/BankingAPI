@@ -16,7 +16,9 @@ defmodule StoneChallengeWeb.UserControllerTest do
       role: "customer"
     }
 
-    @invalid_create_attrs %{}
+    @invalid_create_attrs %{
+      role: "customer"
+    }
 
     @invalid_password_confirmation_create_attrs %{
       first_name: "Create",
@@ -56,10 +58,12 @@ defmodule StoneChallengeWeb.UserControllerTest do
 
       body = api_conn |> response(201) |> Poison.decode!()
 
-      assert body["user"]["email"] == "createtest@gmail.com"
-      assert body["user"]["first_name"] == "Create"
-      assert body["user"]["last_name"] == "Test"
-      assert body["user"]["role"] == "customer"
+      response = body["data"]
+
+      assert response["user"]["email"] == "createtest@gmail.com"
+      assert response["user"]["first_name"] == "Create"
+      assert response["user"]["last_name"] == "Test"
+      assert response["user"]["role"] == "customer"
     end
 
     test "testing create user with invalid attrs", %{conn: conn} do
@@ -93,7 +97,7 @@ defmodule StoneChallengeWeb.UserControllerTest do
 
       body = api_conn |> response(422) |> Poison.decode!()
 
-      assert body["errors"]["role"] == ["is invalid"]
+      assert body["error"] == "role should be provided"
     end
 
     test "testing create user with invalid password length", %{conn: conn} do
@@ -130,7 +134,6 @@ defmodule StoneChallengeWeb.UserControllerTest do
         |> get("/api/users")
 
       body = api_conn |> response(200) |> Poison.decode!()
-
       assert length(body["data"]) == 2
     end
   end

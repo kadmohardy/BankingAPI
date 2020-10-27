@@ -14,7 +14,9 @@ defmodule StoneChallenge.AccountsTest do
       role: "customer"
     }
 
-    @invalid_attrs %{}
+    @invalid_attrs %{
+      role: "customer"
+    }
 
     test "testing user registration with valid data" do
       assert {:ok, user, account} = Accounts.sign_up(@valid_attrs)

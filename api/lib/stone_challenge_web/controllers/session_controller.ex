@@ -29,7 +29,9 @@ defmodule StoneChallengeWeb.SessionController do
     else
       conn
       |> put_status(:unprocessable_entity)
-      |> render(StoneChallengeWeb.ErrorView, "error_message.json", message: "email and password should be provided")
+      |> render(StoneChallengeWeb.ErrorView, "error_message.json",
+        message: "email and password should be provided"
+      )
       |> halt
     end
   end

@@ -4,8 +4,10 @@ defmodule StoneChallengeWeb.BankTransferView do
 
   def render("bank_transfer.json", %{account: account, transaction: transaction}) do
     %{
-      account: account_json(account),
-      transaction: transaction_json(transaction)
+      data: %{
+        account: account_json(account),
+        transaction: transaction_json(transaction)
+      }
     }
   end
 

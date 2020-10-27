@@ -15,6 +15,12 @@ defmodule StoneChallenge.Accounts do
     |> User.changeset(attrs)
   end
 
+  defp insert_user(attrs) do
+    %User{}
+    |> User.changeset(attrs)
+    |> Repo.insert()
+  end
+
   def update_account(%Account{} = account, attrs) do
     account
     |> Account.changeset(attrs)
@@ -68,6 +74,23 @@ defmodule StoneChallenge.Accounts do
   end
 
   def sign_up(attrs \\ %{}) do
+    Logger.info("------------------------------------------------------------")
+    role = attrs["role"] || attrs.role
+    Logger.info(role)
+
+    cond do
+      role == "customer" ->
+        register_customer(attrs)
+
+      role == "admin" ->
+          register_admin(attrs)
+
+      true ->
+        {:error, "role should be provided"}
+    end
+  end
+
+  defp register_customer(attrs \\ %{}) do
     transaction =
       Ecto.Multi.new()
       |> Ecto.Multi.insert(:user, generate_user(attrs))
@@ -81,6 +104,13 @@ defmodule StoneChallenge.Accounts do
     case transaction do
       {:ok, operations} -> {:ok, operations.user, operations.account}
       {:error, :user, changeset, _} -> {:error, changeset}
+    end
+  end
+
+  defp register_admin(attrs \\ %{}) do
+    case insert_user(attrs) do
+      {:ok, user} -> {:ok, user, nil}
+      {:error, changeset} -> {:error, changeset}
     end
   end
 

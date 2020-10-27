@@ -48,12 +48,15 @@ defmodule StoneChallengeWeb.BankTransferController do
     account_to = conn.params["account_to"]
 
     conn
+
     if amount != nil && account_to != nil do
       conn
     else
       conn
       |> put_status(:unprocessable_entity)
-      |> render(StoneChallengeWeb.ErrorView, "error_message.json", message: "amount and account_to should be provided")
+      |> render(StoneChallengeWeb.ErrorView, "error_message.json",
+        message: "amount and account_to should be provided"
+      )
       |> halt
     end
   end

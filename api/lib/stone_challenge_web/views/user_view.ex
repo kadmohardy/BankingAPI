@@ -5,14 +5,22 @@ defmodule StoneChallengeWeb.UserView do
 
   def render("account.json", %{account: account, user: user}) do
     %{
-      account_id: account.id,
-      balance: account.balance,
-      user: user_json(user)
+      data: %{
+        account_id: account.id,
+        balance: account.balance,
+        user: user_json(user)
+      }
     }
   end
 
   def render("user.json", %{user: user}) do
     user_account_json(user)
+  end
+
+  def render("user_admin.json", %{user: user}) do
+    %{
+      data: user_json(user)
+    }
   end
 
   def render("show.json", %{user: user}) do
@@ -24,7 +32,9 @@ defmodule StoneChallengeWeb.UserView do
   end
 
   def render("create.json", %{user: user}) do
-    user_json(user)
+    %{
+      data: user_json(user)
+    }
   end
 
   def user_json(user) do

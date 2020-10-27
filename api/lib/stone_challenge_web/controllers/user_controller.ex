@@ -13,11 +13,20 @@ defmodule StoneChallengeWeb.UserController do
     end
   end
 
-  def create(conn, params) do
+  def create(
+        conn,
+        params
+      ) do
     with {:ok, user, account} <- Accounts.sign_up(params) do
-      conn
-      |> put_status(:created)
-      |> render(StoneChallengeWeb.UserView, "account.json", %{account: account, user: user})
+      if user.role == "customer" do
+        conn
+        |> put_status(:created)
+        |> render(StoneChallengeWeb.UserView, "account.json", %{account: account, user: user})
+      else
+        conn
+        |> put_status(:created)
+        |> render(StoneChallengeWeb.UserView, "user_admin.json", %{user: user})
+      end
     end
   end
 

@@ -16,7 +16,7 @@ defmodule StoneChallenge.BackOffice do
 
     case is_valid_numbers_params(day, month, year) do
       {:ok, _} ->
-       report_type = get_report_type(day, month, year)
+        report_type = get_report_type(day, month, year)
 
         cond do
           report_type == "diary" ->
@@ -28,10 +28,10 @@ defmodule StoneChallenge.BackOffice do
           report_type == "yearly" ->
             generate_yearly_report(year)
 
-          report_type == "total"  ->
+          report_type == "total" ->
             total_transactions_report()
 
-          true  ->
+          true ->
             {:error, "Invalid parameters"}
         end
 
@@ -169,7 +169,7 @@ defmodule StoneChallenge.BackOffice do
       day == nil && month == nil && year == nil ->
         "total"
 
-      true  ->
+      true ->
         nil
     end
   end
