@@ -25,19 +25,31 @@ To register a new user you can send a POST request to ````localhost:4000/users``
 }
 ````
 
-Following, we have a example of response: 
+Following, we have a example of response for customer register: 
 ````
 {
     data: {
-	    "account": {
-		"account_number": "197023",
-		"name": 1000
-	    },
-	    "email": "joao10@gmail.com",
-	    "id": 23,
-	    "name": "Joao10"
-	    "customer": true
-	  }
+    	"account_id": "0cef1dee-ca6d-4d23-b191-3f46e44d6753",
+        "balance": 1000,
+        "user": {
+            "email": "customer12@gmail.com",
+            "first_name": "Customer12",
+            "id": "b8965d09-c2f7-44b3-bbbd-f7f8c771051a",
+            "last_name": "Customer12",
+            "role": "customer"
+        }
+}
+````
+and for admin backoffice, we have: 
+````
+{
+     "data": {
+        "email": "backoffice14@gmail.com",
+        "first_name": "Backoffice14",
+        "id": "b37616cf-418f-4f10-a31b-95fcd45addc7",
+        "last_name": "BackofficeLast14",
+        "role": "admin"
+    }
 }
 ````
 
