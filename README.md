@@ -152,6 +152,7 @@ http://104.248.48.177 [StoneChallengeAPI](http://104.248.48.177). For API reques
 
 The response could be following formats: 
 
+For success response,
 ```` 
 	{ 
 		data: {
@@ -160,14 +161,7 @@ The response could be following formats:
 	}
 ```` 
 
-```` 
-	{ 
-		error: {
-		     //elements
-		}
-	}
-```` 
-
+For changeset errors, 
 ```` 
 	{ 
 		errors: [{
@@ -175,3 +169,12 @@ The response could be following formats:
 		}]
 	}
 ```` 
+
+For general errors,
+```` 
+	{ 
+		error: "error message"
+	}
+```` 
+
+
