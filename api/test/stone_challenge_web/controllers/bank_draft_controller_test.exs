@@ -20,6 +20,8 @@ defmodule StoneChallengeWeb.BankDraftControllerTest do
       amount: "-200.50"
     }
 
+    @create_without_amount %{}
+
     setup %{conn: conn} do
       user = user_fixture()
       conn = assign(conn, :signed_user, user)
@@ -69,6 +71,20 @@ defmodule StoneChallengeWeb.BankDraftControllerTest do
       body = api_conn |> response(422) |> Poison.decode!()
 
       assert body["error"] == "Invalid amount format"
+    end
+
+    test "testing bank draft transaction with customer valid user and no providing amount", %{
+      user: user,
+      conn: conn
+    } do
+      api_conn =
+        conn
+        |> put_req_header("authorization", "Bearer " <> @user_customer_token)
+        |> post("/api/transactions/draft", @create_without_amount)
+
+      body = api_conn |> response(422) |> Poison.decode!()
+
+      assert body["error"] == "amount should be provided"
     end
   end
 end

@@ -17,7 +17,6 @@ defmodule StoneChallengeWeb.UserController do
     with {:ok, user, account} <- Accounts.sign_up(params) do
       conn
       |> put_status(:created)
-      # |> put_resp_header("location", Routes.user_path(conn, :show, id: user.id))
       |> render(StoneChallengeWeb.UserView, "account.json", %{account: account, user: user})
     end
   end

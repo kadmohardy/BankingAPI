@@ -25,27 +25,4 @@ defmodule StoneChallengeWeb.ReportsController do
       |> halt
     end
   end
-
-  #  def validate_parameters(conn, _) do
-  #   day = conn.params["day"]
-  #   month = conn.params["month"]
-  #   year = conn.params["year"]
-
-  #   cond do
-  #     day != nil && month != nil && year != nil ->
-  #       conn
-
-  #     day != nil && month != nil && year != nil ->
-  #         conn
-  #   end
-
-  #   if email != nil && password != nil do
-  #     conn
-  #   else
-  #     conn
-  #     |> put_status(:unprocessable_entity)
-  #     |> render(StoneChallengeWeb.ErrorView, "error_message.json", message: "email and password should be provided")
-  #     |> halt
-  #   end
-  # end
 end

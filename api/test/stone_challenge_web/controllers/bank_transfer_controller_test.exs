@@ -91,5 +91,37 @@ defmodule StoneChallengeWeb.BankTransferControllerTest do
 
       assert body["error"] == "You can't transfer money to your account."
     end
+
+    test "testing bank transfer transaction with no account_to provided", %{
+      account_from: account_from,
+      conn: conn
+    } do
+      api_conn =
+        conn
+        |> put_req_header("authorization", "Bearer " <> @user_customer_token)
+        |> post("/api/transactions/transfer", %{
+          amount: "10.50"
+        })
+
+      body = api_conn |> response(422) |> Poison.decode!()
+
+      assert body["error"] == "amount and account_to should be provided"
+    end
+
+    test "testing bank transfer transaction with no amount provided", %{
+      account_from: account_from,
+      conn: conn
+    } do
+      api_conn =
+        conn
+        |> put_req_header("authorization", "Bearer " <> @user_customer_token)
+        |> post("/api/transactions/transfer", %{
+          account_to: account_from.id
+        })
+
+      body = api_conn |> response(422) |> Poison.decode!()
+
+      assert body["error"] == "amount and account_to should be provided"
+    end
   end
 end
