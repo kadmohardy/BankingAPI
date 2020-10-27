@@ -16,7 +16,7 @@ defmodule StoneChallenge.BackOffice do
 
     case is_valid_numbers_params(day, month, year) do
       {:ok, _} ->
-        {:ok, report_type} = get_report_type(day, month, year)
+       report_type = get_report_type(day, month, year)
 
         cond do
           report_type == "diary" ->
@@ -28,8 +28,11 @@ defmodule StoneChallenge.BackOffice do
           report_type == "yearly" ->
             generate_yearly_report(year)
 
-          true ->
+          report_type == "total"  ->
             total_transactions_report()
+
+          true  ->
+            {:error, "Invalid parameters"}
         end
 
       {:error, message} ->
@@ -155,24 +158,27 @@ defmodule StoneChallenge.BackOffice do
   defp get_report_type(day, month, year) do
     cond do
       day != nil && month != nil && year != nil ->
-        {:ok, "diary"}
+        "diary"
 
-      month != nil && year != nil ->
-        {:ok, "monthly"}
+      day == nil && month != nil && year != nil ->
+        "monthly"
 
-      year != nil ->
-        {:ok, "yearly"}
+      day == nil && month == nil && year != nil ->
+        "yearly"
 
-      true ->
-        {:ok, "total"}
+      day == nil && month == nil && year == nil ->
+        "total"
+
+      true  ->
+        nil
     end
   end
 
   defp is_valid_numbers_params(day, month, year) do
     cond do
-      !is_only_numbers(day) -> {:error, "Invalid day param"}
-      !is_only_numbers(month) -> {:error, "Invalid month param"}
-      !is_only_numbers(year) -> {:error, "Invalid year param"}
+      day != nil && !is_only_numbers(day) -> {:error, "Invalid day param"}
+      month != nil && !is_only_numbers(month) -> {:error, "Invalid month param"}
+      year != nil && !is_only_numbers(year) -> {:error, "Invalid year param"}
       true -> {:ok, :success}
     end
   end
