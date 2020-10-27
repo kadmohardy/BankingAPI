@@ -62,7 +62,7 @@ defmodule StoneChallenge.Banking do
     if account_from != nil && value != nil do
       cond do
         # Verify if user has money
-        Decimal.negative?(value) ->
+        value == Decimal.new(0.0) || Decimal.negative?(value) ->
           {:error, "The amount should be more than zero"}
 
         BankingHelper.is_negative_balance(account_from.balance, value) ->
@@ -139,7 +139,7 @@ defmodule StoneChallenge.Banking do
       account_from.id == account_to.id ->
         {:error, "You can't transfer money to your account."}
 
-      Decimal.negative?(value) ->
+      value == Decimal.new(0.0) || Decimal.negative?(value) ->
         {:error, "The amount should be more than zero"}
 
       BankingHelper.is_negative_balance(account_from.balance, value) ->

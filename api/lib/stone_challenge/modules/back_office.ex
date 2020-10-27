@@ -29,7 +29,7 @@ defmodule StoneChallenge.BackOffice do
             generate_yearly_report(year)
 
           report_type == "total" ->
-            total_transactions_report()
+            generate_total_report()
 
           true ->
             {:error, "Invalid parameters"}
@@ -43,20 +43,52 @@ defmodule StoneChallenge.BackOffice do
   defp diary_transactions_report(day, month, year) do
     period = StringsHelper.format_day_month_and_year(day, month, year)
 
-    row_counts_by_day(period) |> Repo.all() |> Map.new()
+    result = row_counts_by_day(period) |> Repo.all() |> Map.new()
+
+    total = result["total"]
+
+    if total != nil do
+      %{total: total}
+    else
+      %{total: "00.00"}
+    end
   end
 
   defp monthly_transactions_report(month, year) do
     period = StringsHelper.format_month_and_year(month, year)
-    row_counts_by_month(period) |> Repo.all() |> Map.new()
+    result = row_counts_by_month(period) |> Repo.all() |> Map.new()
+
+    total = result["total"]
+
+    if total != nil do
+      %{total: total}
+    else
+      %{total: "00.00"}
+    end
   end
 
   defp yearly_transactions_report(year) do
-    row_counts_by_year(year) |> Repo.all() |> Map.new()
+    result = row_counts_by_year(year) |> Repo.all() |> Map.new()
+
+    total = result["total"]
+
+    if total != nil do
+      %{total: total}
+    else
+      %{total: "00.00"}
+    end
   end
 
   defp total_transactions_report do
-    Repo.all(from t in Transaction, select: sum(t.amount))
+    result = row_counts_total |> Repo.all() |> Map.new()
+
+    total = result["total"]
+
+    if total != nil do
+      %{total: total}
+    else
+      %{total: "00.00"}
+    end
   end
 
   defmacro to_char(field, format) do
@@ -71,21 +103,26 @@ defmodule StoneChallenge.BackOffice do
       where:
         to_char(record.inserted_at, "dd-mm-YYYY") ==
           ^period,
-      select: {"total", sum(record.amount)}
+      select: {"total", sum(coalesce(record.amount, 0))}
   end
 
   defp row_counts_by_month(period) do
     from record in Transaction,
       group_by: to_char(record.inserted_at, "mm-YYYY"),
       where: to_char(record.inserted_at, "mm-YYYY") == ^period,
-      select: {"total", sum(record.amount)}
+      select: {"total", sum(coalesce(record.amount, 0))}
   end
 
   defp row_counts_by_year(period) do
     from record in Transaction,
       group_by: to_char(record.inserted_at, "YYYY"),
       where: to_char(record.inserted_at, "YYYY") == ^period,
-      select: {"total", sum(record.amount)}
+      select: {"total", sum(coalesce(record.amount, 0))}
+  end
+
+  defp row_counts_total do
+    from record in Transaction,
+      select: {"total", sum(coalesce(record.amount, 0))}
   end
 
   defp generate_diary_report(day, month, year) do
@@ -116,6 +153,10 @@ defmodule StoneChallenge.BackOffice do
       {:ok, _} -> {:ok, yearly_transactions_report(year)}
       {:error, message} -> {:error, message}
     end
+  end
+
+  defp generate_total_report do
+    {:ok, total_transactions_report()}
   end
 
   defp validate_diary_report_params(day, month, year) do

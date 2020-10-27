@@ -83,7 +83,7 @@ defmodule StoneChallenge.Accounts do
         register_customer(attrs)
 
       role == "admin" ->
-          register_admin(attrs)
+        register_admin(attrs)
 
       true ->
         {:error, "role should be provided"}

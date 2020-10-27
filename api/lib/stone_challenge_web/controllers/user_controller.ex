@@ -5,6 +5,7 @@ defmodule StoneChallengeWeb.UserController do
 
   action_fallback StoneChallengeWeb.FallbackController
   plug :validate_permission when action in [:index, :show]
+  plug :validate_parameters when action in [:create]
 
   def index(conn, _params) do
     with users <- Accounts.list_customer_users() do
@@ -46,6 +47,21 @@ defmodule StoneChallengeWeb.UserController do
       conn
       |> put_status(:unprocessable_entity)
       |> render(StoneChallengeWeb.ErrorView, "error_message.json", message: "Unauthorized")
+      |> halt
+    end
+  end
+
+  def validate_parameters(conn, _) do
+    role = conn.params["role"]
+
+    if role != nil do
+      conn
+    else
+      conn
+      |> put_status(:unprocessable_entity)
+      |> render(StoneChallengeWeb.ErrorView, "error_message.json",
+        message: "role should be provided"
+      )
       |> halt
     end
   end
