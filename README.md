@@ -85,8 +85,7 @@ To make a bank transfer you need send a POST request to ````localhost:4000/sessi
 }
 ````
 
-It`s important to note that transaction operations needs an authentication token to be realized. We using integers number for money amount in order to simplify transactions process.
-
+It`s important to note that transaction operations needs an authentication token to be realized. 
 ### 1.4 Back Office
   The API provide a set of very simplistic reports that inform the total traded per day, month and year. To give diary report, the user needs make a GET request using the following route: 
   ````localhost:4000/reports?type=diary&day=07&month=08&year=2020````
