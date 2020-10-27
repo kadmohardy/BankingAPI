@@ -33,12 +33,13 @@ defmodule StoneChallengeWeb.BankTransferControllerTest do
 
       body = api_conn |> response(200) |> Poison.decode!()
 
-      assert body["account"]["balance"] == "989.50"
-      assert body["account"]["account_id"] == account_from.id
-      assert body["transaction"]["account_from"] == account_from.id
-      assert body["transaction"]["account_to"] == account_to.id
-      assert body["transaction"]["amount"] == "10.5"
-      assert body["transaction"]["type"] == "bank_transfer"
+      response = body["data"]
+      assert response["account"]["balance"] == "989.50"
+      assert response["account"]["account_id"] == account_from.id
+      assert response["transaction"]["account_from"] == account_from.id
+      assert response["transaction"]["account_to"] == account_to.id
+      assert response["transaction"]["amount"] == "10.5"
+      assert response["transaction"]["type"] == "bank_transfer"
     end
 
     test "testing bank transfer transaction with customer valid user and invalid amount", %{

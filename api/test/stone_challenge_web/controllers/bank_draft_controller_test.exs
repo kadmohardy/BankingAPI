@@ -39,10 +39,11 @@ defmodule StoneChallengeWeb.BankDraftControllerTest do
 
       body = api_conn |> response(200) |> Poison.decode!()
 
-      assert body["account"]["balance"] == "989.50"
-      assert body["transaction"]["account_to"] == nil
-      assert body["transaction"]["amount"] == "10.5"
-      assert body["transaction"]["type"] == "bank_draft"
+      response = body["data"]
+      assert response["account"]["balance"] == "989.50"
+      assert response["transaction"]["account_to"] == nil
+      assert response["transaction"]["amount"] == "10.5"
+      assert response["transaction"]["type"] == "bank_draft"
     end
 
     test "testing bank draft transaction with customer valid user and invalid amount", %{
