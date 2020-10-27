@@ -67,7 +67,7 @@ defmodule StoneChallengeWeb.UserViewTest do
         user: user
       )
 
-    assert rendered_account == %{
+    assert rendered_account.data == %{
              account_id: account.id,
              balance: account.balance,
              user: %{

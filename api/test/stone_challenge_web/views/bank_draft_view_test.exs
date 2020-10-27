@@ -28,13 +28,15 @@ defmodule StoneChallengeWeb.BankDraftViewTest do
         transaction: transaction
       )
 
-    assert rendered_bank_draft.account.account_id == account.id
-    assert rendered_bank_draft.account.balance == account.balance
+    body = rendered_bank_draft.data
 
-    assert rendered_bank_draft.transaction.account_from == transaction.account_from
-    assert rendered_bank_draft.transaction.account_to == transaction.account_to
-    assert rendered_bank_draft.transaction.amount == transaction.amount
-    assert rendered_bank_draft.transaction.date == transaction.date
-    assert rendered_bank_draft.transaction.type == transaction.type
+    assert body.account.account_id == account.id
+    assert body.account.balance == account.balance
+
+    assert body.transaction.account_from == transaction.account_from
+    assert body.transaction.account_to == transaction.account_to
+    assert body.transaction.amount == transaction.amount
+    assert body.transaction.date == transaction.date
+    assert body.transaction.type == transaction.type
   end
 end

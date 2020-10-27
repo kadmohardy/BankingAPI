@@ -22,7 +22,7 @@ config :stone_challenge, StoneChallengeWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger,
-  backends: [:console],
-  compile_time_purge_level: :debug
+  # backends: [:console],
+  # compile_time_purge_level: :debug
 
-# level: :warn
+  level: :warn
