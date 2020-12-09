@@ -1,4 +1,4 @@
-# Stone Challenge API
+# Banking API
 Banking API developed by Kadmo Hardy using Elixir/Phoenix.
 
 To start your Phoenix server:
